@@ -1,0 +1,29 @@
+.header {
+  font-weight: 300;
+  font-size: 22px;
+  padding: 15px 15px 0 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  @media (max-width: 760px) {
+    font-size: 18px;
+    padding: 8px 8px 0 8px;
+  }
+}
+.title {
+  font-size: 28px;
+  line-height: 40px;
+  font-weight: 400;
+  color: #333;
+  margin: 0;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+
+  @media (max-width: 1200px) {
+    font-size: 22px;
+    line-height: 25px;
+  }
+}

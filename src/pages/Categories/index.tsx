@@ -1,0 +1,100 @@
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import Card from "@/components/Card";
+import Pagination from "@/components/Pagination";
+import { handleIdx } from "@/utils/helpers";
+import TableHead from "@/components/TableHead";
+import TableViewBtn from "@/components/TableViewBtn";
+import useCategories from "@/hooks/useCategories";
+import ItemsCount from "@/components/ItemsCount";
+import useQueryString from "custom/useQueryString";
+
+import EmptyList from "@/components/EmptyList";
+import Loading from "@/components/Loader";
+import { useTranslation } from "react-i18next";
+import { BtnTypes, CategoryType } from "@/utils/types";
+import Header from "@/components/Header";
+import Button from "@/components/Button";
+import { useAppSelector } from "@/store/rootConfig";
+import { langSelector } from "@/store/reducers/selects";
+
+const column = [
+  { name: "№", key: "" },
+  { name: "name_ru", key: "name_ru" },
+  { name: "name_uz", key: "name_uz" },
+  { name: "status", key: "status" },
+  { name: "", key: "" },
+];
+
+const Categories = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [sort, $sort] = useState<CategoryType[]>();
+  const lang = useAppSelector(langSelector);
+  const { search } = useLocation();
+  const page = Number(useQueryString("page")) || 1;
+  const { data: categories, isLoading } = useCategories({
+    page,
+  });
+  const handleNavigate = (route: string) => navigate(route);
+
+  return (
+    <Card>
+      <Header title={"categories"}>
+        <div className="flex gap-2">
+          <Button
+            className="btn btn-success btn-fill"
+            onClick={() => handleNavigate(`add${search}`)}
+          >
+            {t("add")}
+          </Button>
+          <Button
+            btnType={BtnTypes.primary}
+            onClick={() => navigate(-1)}
+            className="btn btn-primary btn-fill"
+          >
+            {t("back")}
+          </Button>
+        </div>
+      </Header>
+
+      <div className="p-4">
+        <div className="table-responsive grid-view">
+          <ItemsCount data={categories} />
+          <table className="table table-hover">
+            <TableHead
+              column={column}
+              onSort={(data) => $sort(data)}
+              data={categories?.items}
+            />
+
+            <tbody>
+              {!!categories?.items?.length &&
+                (sort?.length ? sort : categories?.items)?.map(
+                  (category, idx) => (
+                    <tr key={idx} className="bg-blue">
+                      <td width="40">{handleIdx(idx)}</td>
+                      <td>{category?.name_ru}</td>
+                      <td>{category?.name_uz}</td>
+                      <td>{category?.status ? t("active") : t("inactive")}</td>
+                      <td width={40}>
+                        <TableViewBtn
+                          onClick={() => handleNavigate(category.id.toString())}
+                        />
+                      </td>
+                    </tr>
+                  )
+                )}
+            </tbody>
+          </table>
+          {isLoading && <Loading />}
+
+          {!categories?.items?.length && !isLoading && <EmptyList />}
+          {!!categories && <Pagination totalPages={categories.pages} />}
+        </div>
+      </div>
+    </Card>
+  );
+};
+
+export default Categories;

@@ -45,7 +45,7 @@ const ShowRequestApc = () => {
 
   const handleShowPhoto = (file: string) => () => {
     return detectFileType(file) === FileType.other
-      ? window.open(file)
+      ? window.open(`${baseURL}/${file}`)
       : navigateParams({
           modal: ModalTypes.image,
           photo: `${baseURL}/${file}`,

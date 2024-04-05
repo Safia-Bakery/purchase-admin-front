@@ -22,6 +22,7 @@ import dayjs from "dayjs";
 const column = [
   { name: "№", key: "" },
   { name: "order_number", key: "name" },
+  { name: "client", key: "name" },
   { name: "category", key: "category" },
   { name: "created_at", key: "created_at" },
   { name: "status", key: "status" },
@@ -71,6 +72,7 @@ const Orders = () => {
                     <td width="80">
                       <Link to={`${order.id}`}>{order.id}</Link>
                     </td>
+                    <td>{order?.user?.name}</td>
                     <td>{order?.category?.[`name_${lang}`]}</td>
                     <td>{dayjs(order.created_at).format(dateTimeFormat)}</td>
                     <td>{t(OrderStatus[order?.status])}</td>

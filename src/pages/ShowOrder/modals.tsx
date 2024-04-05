@@ -136,8 +136,6 @@ const Modals = () => {
 
   if (orderFetching) return <Loading />;
 
-  console.log("first");
-
   return (
     <Modal
       onClose={() => removeParams(["modal", !!photo ? "photo" : ""])}

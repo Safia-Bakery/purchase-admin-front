@@ -1,5 +1,6 @@
 import BaseInput from "@/components/BaseInputs";
 import MainInput from "@/components/BaseInputs/MainInput";
+import Button from "@/components/Button";
 import Loading from "@/components/Loader";
 import loginMutation from "@/hooks/mutation/login";
 import { loginHandler, tokenSelector } from "@/store/reducers/auth";
@@ -83,9 +84,9 @@ const Login = () => {
             <p className={"text-sm text-red-400"}>{t("incorrect_username")}</p>
           )}
 
-          <button type="submit" className="hidden">
-            submit
-          </button>
+          <Button className="!bg-lightBrown" type="submit">
+            {t("login")}
+          </Button>
         </form>
 
         <div className="max-w-[24vw] w-full">

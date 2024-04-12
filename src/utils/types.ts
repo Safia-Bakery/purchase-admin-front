@@ -82,4 +82,5 @@ export enum BtnTypes {
   warn = "warn",
   info = "info",
   primary = "primary",
+  brown = "brown",
 }

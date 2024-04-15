@@ -3,6 +3,10 @@ import { logoutHandler } from "@/store/reducers/auth";
 import { store } from "@/store/rootConfig";
 
 export const baseURL = "https://api.purchase.safiabakery.uz";
+const logoutObj: { [key: number]: boolean } = {
+  401: true,
+  403: true,
+};
 
 const baseApi: AxiosInstance = axios.create({
   baseURL,
@@ -27,7 +31,7 @@ baseApi.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error?.response?.status === 401) {
+    if (logoutObj[error?.response?.status]) {
       logoutUser();
     }
     return Promise.reject(error);

@@ -125,13 +125,6 @@ const ShowRequestApc = () => {
           title={`${t("order")} №${id}`}
           subTitle={`${t("status")}: ${t(OrderStatus[order?.status!])}`}
         >
-          {/* <Button
-            className="btn btn-warning"
-            onClick={() => navigate(`/request/logs/${id}`)}
-          >
-            {t("logs")}
-          </Button> */}
-
           <Button
             onClick={handleBack}
             btnType={BtnTypes.primary}

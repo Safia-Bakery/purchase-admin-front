@@ -10,6 +10,7 @@ type Props = {
   onClick?: () => void;
   type?: "submit" | "reset" | "button";
   btnType?: BtnTypes;
+  disabled?: boolean;
 };
 
 const Button = ({
@@ -21,7 +22,9 @@ const Button = ({
 }: Props) => {
   return (
     <button
-      className={`${className} ${cl(styles.btn, styles[btnType])}`}
+      className={`${className} ${cl(styles.btn, styles[btnType], {
+        ["!bg-[#D9D9D9] !text-[#00000066]"]: others.disabled,
+      })}`}
       {...others}
     >
       {children}

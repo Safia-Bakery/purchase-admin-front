@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import cl from "classnames";
 import { logoutHandler } from "reducers/auth";
 import styles from "./index.module.scss";
@@ -6,7 +6,16 @@ import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "@/store/rootConfig";
 import { isMobile } from "@/utils/helpers";
 import { sidebarHandler, toggleSidebar } from "@/store/reducers/selects";
-import useToken from "@/hooks/useToken";
+
+import { Fragment, useState } from "react";
+import {
+  Sidebar,
+  Menu,
+  MenuItem,
+  SubMenu,
+  MenuItemStyles,
+} from "react-pro-sidebar";
+import "./index.scss";
 
 const routes = [
   {
@@ -20,69 +29,146 @@ const routes = [
     param: "",
     icon: "/icons/categories.svg",
   },
+  {
+    name: "building",
+    icon: "/icons/building.svg",
+    subroutes: [
+      {
+        name: "orders",
+        url: "/foreman-orders",
+        icon: "/icons/orders.svg",
+      },
+      {
+        name: "buildingMaterial",
+        url: "/building-materials",
+        icon: "/icons/buildingMaterials.svg",
+      },
+      {
+        name: "foremen",
+        url: "/foremen",
+        icon: "/icons/foreman.svg",
+      },
+    ],
+  },
 ];
 
-const Sidebar = () => {
+const menuItemStyles: MenuItemStyles = {
+  root: {
+    fontSize: "13px",
+    fontWeight: 400,
+  },
+  SubMenuExpandIcon: {
+    color: "#b6b7b9",
+  },
+  label: ({ open }) => ({
+    fontWeight: open ? 600 : undefined,
+  }),
+};
+
+const CustomSidebar = () => {
   const { t } = useTranslation();
   const collapsed = useAppSelector(toggleSidebar);
   const dispatch = useAppDispatch();
   const handleOverlay = () => dispatch(sidebarHandler(!collapsed));
   const { pathname } = useLocation();
-  const { data } = useToken({});
+  const navigate = useNavigate();
+  const [menuItem, $menuItem] = useState<string>();
+
+  const toggleSubItems = (item: string) =>
+    $menuItem(item === menuItem ? undefined : item);
 
   const handleLogout = () => dispatch(logoutHandler());
-
-  const closeSidebar = () => {
-    if (isMobile) dispatch(sidebarHandler(false));
-  };
 
   return (
     <>
       {collapsed && <div className={styles.overlay} onClick={handleOverlay} />}
-      <div
-        className={cl(styles.sidebar, "sidebar", {
-          [styles.collapsed]: collapsed,
-        })}
+      <Sidebar
+        // collapsed={collapsed}
+        className={cl(styles.sidebar, { [styles.collapsed]: collapsed })}
+        toggled={collapsed}
+        onBackdropClick={handleOverlay}
+        image="https://user-images.githubusercontent.com/25878302/144499035-2911184c-76d3-4611-86e7-bc4e8ff84ff5.jpg"
+        rtl={false}
+        breakPoint="md"
+        backgroundColor={"rgba(68, 125, 247, 0.8)"}
       >
-        <div className="flex flex-col justify-between relative z-3">
-          <div className={`${styles.link} ${styles.logo} `}>
-            <img
-              height={20}
-              width={20}
-              src={"/images/qrimage.png"}
-              className={styles.routeIcon}
-            />
-            <h3 className={styles.subTitle}>{t("purchase")}</h3>
+        <div className="flex flex-col h-full">
+          <div className="flex-1">
+            <div className={`${styles.link} ${styles.logo} `}>
+              <img
+                height={20}
+                width={20}
+                src={"/images/qrimage.png"}
+                className={styles.routeIcon}
+              />
+              <h3 className={styles.subTitle}>{t("purchase")}</h3>
+            </div>
+            <Menu menuItemStyles={menuItemStyles}>
+              {routes &&
+                routes.map((route) => (
+                  <Fragment key={route.url + route.name}>
+                    {!!route.subroutes ? (
+                      <SubMenu
+                        open={route.name === menuItem}
+                        onClick={() => toggleSubItems(route.name)}
+                        label={t(route.name)}
+                        className={`${styles.content} ${styles.submenu}`}
+                        icon={
+                          <img
+                            className={styles.routeIcon}
+                            height={30}
+                            width={30}
+                            src={route.icon || ""}
+                          />
+                        }
+                      >
+                        {route?.subroutes?.map((subroute) => (
+                          <MenuItem
+                            onClick={() => navigate(`${subroute.url}`)}
+                            icon={
+                              <img
+                                className={styles.routeIcon}
+                                height={30}
+                                width={30}
+                                src={subroute.icon || ""}
+                              />
+                            }
+                            active={pathname.includes(subroute.url!)}
+                            className={styles.content}
+                            key={subroute.url}
+                          >
+                            {t(subroute.name)}
+                          </MenuItem>
+                        ))}
+                      </SubMenu>
+                    ) : (
+                      <MenuItem
+                        className={cl(styles.content)}
+                        active={pathname.includes(route.url!)}
+                        onClick={() =>
+                          navigate(
+                            `${route.url}${!!route?.param ? route?.param : ""}`
+                          )
+                        }
+                        icon={
+                          <img
+                            className={styles.routeIcon}
+                            height={30}
+                            width={30}
+                            src={route.icon || ""}
+                          />
+                        }
+                      >
+                        {t(route.name)}
+                      </MenuItem>
+                    )}
+                  </Fragment>
+                ))}
+            </Menu>
           </div>
-          <ul className="nav flex-col flex">
-            {routes?.map((route) => (
-              <li className={styles.navItem} key={route.url + route.name}>
-                {/* {route.hasLine && <div className={`${styles.logo} my-2`} />} */}
-                <NavLink
-                  className={cl(styles.link, {
-                    [styles.active]: pathname.includes(route.url!),
-                  })}
-                  onClick={closeSidebar}
-                  to={`${route.url}${!!route?.param ? route?.param : ""}`}
-                  state={{ name: route.name }}
-                >
-                  <img
-                    height={20}
-                    width={20}
-                    src={route.icon || ""}
-                    className={styles.routeIcon}
-                  />
-                  <div className={styles.content}>{t(route.name)}</div>
-                </NavLink>
-              </li>
-            ))}
-          </ul>
         </div>
-        <span onClick={handleLogout} className={styles.logout}>
-          {t("leave")} {data?.name}
-        </span>
-      </div>
+      </Sidebar>
     </>
   );
 };
-export default Sidebar;
+export default CustomSidebar;

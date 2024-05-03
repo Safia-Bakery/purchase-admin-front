@@ -7,7 +7,7 @@ type Props = {
 const EmptyList = ({ label }: Props) => {
   const { t } = useTranslation();
   return (
-    <div className="w-full">
+    <div className="w-full my-3">
       <p className="text-center w-full">{label || t("empty_list")}</p>
     </div>
   );

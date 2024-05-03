@@ -75,7 +75,6 @@ const ShowRequestApc = () => {
         {order?.status! < OrderStatus.done && (
           <Button
             onClick={() => handleModal(ModalTypes.deny_reason)}
-            className="btn btn-danger"
             btnType={BtnTypes.danger}
           >
             {t("deny")}

@@ -3,6 +3,7 @@ import { logoutHandler } from "@/store/reducers/auth";
 import { store } from "@/store/rootConfig";
 
 export const baseURL = "https://api.purchase.safiabakery.uz";
+
 const logoutObj: { [key: number]: boolean } = {
   401: true,
   403: true,
@@ -14,7 +15,7 @@ const baseApi: AxiosInstance = axios.create({
 
 baseApi.interceptors.request.use(
   (config) => {
-    const token = store.getState()?.auth.token;
+    const token = store.getState()?.auth?.token;
 
     if (!!token) {
       if (config.headers) config.headers.Authorization = `Bearer ${token}`;

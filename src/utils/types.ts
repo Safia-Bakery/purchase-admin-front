@@ -84,3 +84,100 @@ export enum BtnTypes {
   primary = "primary",
   brown = "brown",
 }
+export type ToolsType = {
+  folders: [
+    {
+      id: string;
+      name: string;
+      category: null;
+      parent_id: string;
+      num: string;
+      code: string;
+      description: string;
+    }
+  ];
+  tools: ExpenditureType[];
+};
+
+export interface ExpenditureToolType {
+  id: number;
+  tool_id: number;
+  tool: {
+    id: number;
+    name: string;
+    status: number;
+    iiko_id: string;
+    price: number;
+  };
+  amount: number;
+}
+
+export interface ToolsSearchType {
+  id: number;
+  name: string;
+  status: number;
+  iiko_id: string;
+  price: number;
+}
+
+export interface ToolsSearchTypes extends BasePaginate {
+  items: ToolsSearchType[];
+}
+
+export interface ExpenditureType {
+  id: number;
+  client_id: number;
+  client: {
+    id: number;
+    name: string;
+    phone: string;
+    status: number;
+  };
+  branch: {
+    id: number;
+    name: string;
+    status: number;
+  };
+  branch_id: number;
+  status: number;
+  comment: string;
+  expendituretool: ExpenditureToolType[];
+  created_at: string;
+  updated_at: string;
+  deny_reason?: string;
+  user?: { name?: string };
+}
+
+export interface ExpendituresType extends BasePaginate {
+  items: ExpenditureType[];
+}
+
+export interface BranchType {
+  id: number;
+  name: string;
+  status: number;
+}
+
+export interface BranchesType extends BasePaginate {
+  items: BranchType[];
+}
+export interface ClientType {
+  id: number;
+  name: string;
+  status: number;
+  phone: string;
+}
+
+export interface ClientsType extends BasePaginate {
+  items: ClientType[];
+}
+export interface SelectValue {
+  value: number;
+  label: string;
+  count: number;
+}
+
+export enum Operations {
+  decrement,
+  increment,
+}

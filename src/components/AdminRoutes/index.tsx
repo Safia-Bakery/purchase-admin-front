@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom";
-import Sidebar from "../Sidebar";
+import CustomSidebar from "../Sidebar";
 import BreadCrump from "../BreadCrump";
 
 const AdminRoutes = () => {
   return (
     <>
-      <Sidebar />
+      <CustomSidebar />
       <BreadCrump />
 
       <div className="flex flex-col flex-1">

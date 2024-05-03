@@ -16,6 +16,19 @@ const EditAddCategory = lazy(() => import("@/pages/EditAddCategory"));
 const Orders = lazy(() => import("@/pages/Orders"));
 const ShowOrder = lazy(() => import("@/pages/ShowOrder"));
 
+const ForemenOrders = lazy(() => import("@/pages/ForemenOrders"));
+const ShowForemenOrder = lazy(() => import("@/pages/ShowForemenOrder"));
+
+const BuildingMaterials = lazy(() => import("@/pages/BuildingMaterials"));
+
+const Foremen = lazy(() => import("@/pages/Foremen"));
+const EditAddForemen = lazy(() => import("@/pages/EditAddForemen"));
+
+const TgRoutes = lazy(() => import("@/components/TgRoutes"));
+const SelectBranch = lazy(() => import("@/tg-routes/SelectBranch"));
+const SelectProduct = lazy(() => import("@/tg-routes/SelectProduct"));
+const Success = lazy(() => import("@/tg-routes/Success"));
+
 const App = () => {
   const lang = useAppSelector(langSelector);
   const token = useAppSelector(tokenSelector);
@@ -45,6 +58,39 @@ const App = () => {
         }
         path={"/login"}
       />
+      <Route
+        element={
+          <Suspend>
+            <TgRoutes />
+          </Suspend>
+        }
+        path={"/tg"}
+      >
+        <Route
+          path={"select-branch"}
+          element={
+            <Suspend>
+              <SelectBranch />
+            </Suspend>
+          }
+        />
+        <Route
+          path={"select-product"}
+          element={
+            <Suspend>
+              <SelectProduct />
+            </Suspend>
+          }
+        />
+        <Route
+          path={"success/:id"}
+          element={
+            <Suspend>
+              <Success />
+            </Suspend>
+          }
+        />
+      </Route>
 
       <Route
         element={
@@ -91,6 +137,56 @@ const App = () => {
           element={
             <Suspend>
               <EditAddCategory />
+            </Suspend>
+          }
+        />
+        <Route
+          path={"foreman-orders"}
+          element={
+            <Suspend>
+              <ForemenOrders />
+            </Suspend>
+          }
+        />
+        <Route
+          path={"foreman-orders/:id"}
+          element={
+            <Suspend>
+              <ShowForemenOrder />
+            </Suspend>
+          }
+        />
+
+        <Route
+          path={"building-materials"}
+          element={
+            <Suspend>
+              <BuildingMaterials />
+            </Suspend>
+          }
+        />
+
+        <Route
+          path={"foremen"}
+          element={
+            <Suspend>
+              <Foremen />
+            </Suspend>
+          }
+        />
+        <Route
+          path={"foremen/add"}
+          element={
+            <Suspend>
+              <EditAddForemen />
+            </Suspend>
+          }
+        />
+        <Route
+          path={"foremen/:id"}
+          element={
+            <Suspend>
+              <EditAddForemen />
             </Suspend>
           }
         />

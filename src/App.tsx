@@ -1,12 +1,9 @@
 import { lazy, useEffect } from "react";
 import i18n from "./localization";
-import { useAppDispatch, useAppSelector } from "./store/rootConfig";
+import { useAppSelector } from "./store/rootConfig";
 import { langSelector } from "@/store/reducers/selects";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Suspend from "./components/Suspend";
-import { logoutHandler, tokenSelector } from "./store/reducers/auth";
-import useToken from "@/hooks/useToken";
-import Loading from "./components/Loader";
 import "dayjs/locale/ru";
 
 const Login = lazy(() => import("@/pages/Login"));
@@ -31,22 +28,10 @@ const Success = lazy(() => import("@/tg-routes/Success"));
 
 const App = () => {
   const lang = useAppSelector(langSelector);
-  const token = useAppSelector(tokenSelector);
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-
-  const { error, isLoading } = useToken({});
-
-  useEffect(() => {
-    if (!token) navigate("/login");
-    if (!!error) dispatch(logoutHandler());
-  }, [token, error]);
 
   useEffect(() => {
     i18n.changeLanguage(lang);
   }, [lang]);
-
-  if (isLoading) return <Loading />;
 
   return (
     <Routes>

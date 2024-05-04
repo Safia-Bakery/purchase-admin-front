@@ -1,7 +1,7 @@
 import BaseInput from "@/components/BaseInputs";
 import BranchSelect from "@/components/BranchSelect";
 import Button from "@/components/Button";
-import useQueryString from "@/hooks/custom/useQueryString";
+import useUpdateQueryStr from "@/hooks/custom/useUpdateQueryStr";
 import { BtnTypes } from "@/utils/types";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 const SelectBranch = () => {
   const { t } = useTranslation();
 
-  const branchJson = useQueryString("branch");
+  const branchJson = useUpdateQueryStr("branch");
   const branch = branchJson && JSON.parse(branchJson);
 
   return (

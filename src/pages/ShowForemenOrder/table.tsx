@@ -1,26 +1,9 @@
 import { useTranslation } from "react-i18next";
-import { lazy, useEffect, useMemo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import dayjs from "dayjs";
+import { useEffect, useMemo } from "react";
+import { useParams } from "react-router-dom";
 
-import useQueryString from "custom/useQueryString";
-import { useNavigateParams } from "custom/useCustomNavigate";
-import Loading from "@/components/Loader";
-import Suspend from "@/components/Suspend";
-import {
-  BtnTypes,
-  ExpenditureToolType,
-  ModalTypes,
-  Operations,
-  OrderStatus,
-} from "@/utils/types";
-import { dateTimeFormat } from "@/utils/helpers";
-import Container from "@/components/Container";
-import Header from "@/components/Header";
-import Button from "@/components/Button";
-import { errorToast, successToast } from "@/utils/toast";
+import { ExpenditureToolType, Operations } from "@/utils/types";
 import useExpenditure from "@/hooks/useExpenditure";
-import expenditureMutation from "@/hooks/mutation/expenditure";
 import VirtualTable from "@/components/VirtualTable";
 import { ColumnDef } from "@tanstack/react-table";
 import { useForm } from "react-hook-form";
@@ -28,13 +11,6 @@ import { useForm } from "react-hook-form";
 const ProdsTable = () => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const navigate = useNavigate();
-  const modal = Number(useQueryString("modal"));
-  const navigateParams = useNavigateParams();
-  const { mutate, isPending } = expenditureMutation();
-  const handleModal = (type: ModalTypes) => {
-    navigateParams({ modal: type });
-  };
   const { getValues, reset, setValue, register } = useForm();
 
   const { data } = useExpenditure({ id: id });

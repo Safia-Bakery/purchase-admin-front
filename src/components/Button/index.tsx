@@ -11,6 +11,7 @@ type Props = {
   type?: "submit" | "reset" | "button";
   btnType?: BtnTypes;
   disabled?: boolean;
+  id?: string;
 };
 
 const Button = ({

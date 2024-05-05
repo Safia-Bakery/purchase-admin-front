@@ -110,6 +110,9 @@ const ShowForemenOrder = () => {
           title={`${t("order")} №${id}`}
           subTitle={`${t("status")}: ${t(OrderStatus[order?.status!])}`}
         >
+          <Button btnType={BtnTypes.success} id="export_to_excell">
+            Excel
+          </Button>
           <Button
             onClick={handleBack}
             btnType={BtnTypes.primary}

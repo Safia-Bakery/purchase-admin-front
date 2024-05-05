@@ -67,7 +67,7 @@ const ProdsTable = () => {
         header: t("qnt"),
         cell: ({ row }) => (
           <div className="flex gap-2 items-center">
-            <button
+            {/* <button
               className="text-xl"
               onClick={handleValue({
                 op: Operations.decrement,
@@ -75,7 +75,8 @@ const ProdsTable = () => {
               })}
             >
               -
-            </button>
+            </button> */}
+
             <span>
               <input
                 className="w-16 bg-transparent text-center"
@@ -83,7 +84,7 @@ const ProdsTable = () => {
                 {...register(`${row.original.tool_id}`)}
               />
             </span>
-            <button
+            {/* <button
               onClick={handleValue({
                 op: Operations.increment,
                 id: row.original.tool_id,
@@ -91,14 +92,17 @@ const ProdsTable = () => {
               className="text-xl"
             >
               +
-            </button>
+            </button> */}
+            <p className="opacity-0">{row.original.amount}</p>
           </div>
         ),
       },
       {
         accessorKey: "sum",
         header: t("sum"),
-        cell: ({ row }) => Number(getValues(`${row.original?.tool_id}`)) * 2, // row.original?.tool?.price
+        cell: ({ row }) =>
+          Number(getValues(`${row.original?.tool_id}`)) *
+          row.original?.tool?.price, // row.original?.tool?.price
       },
     ],
     []

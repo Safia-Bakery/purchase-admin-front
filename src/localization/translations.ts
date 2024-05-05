@@ -118,6 +118,9 @@ const localization = {
       your_order: "Ваша заявка",
       receivedd: "принята",
       ready: "Готово",
+      sum: "Сумма",
+      branch: "Филиал",
+      "foreman-orders": "Заявки на бригадиров",
     },
   },
   uz: {

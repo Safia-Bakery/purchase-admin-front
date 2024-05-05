@@ -8,8 +8,9 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { ReactNode, useRef, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import EmptyList from "../EmptyList";
+import { useDownloadExcel } from "react-export-table-to-excel";
 
 type ReturnFunction<Tval> = (smt: Tval) => string;
 type RowClassName<T> = string | ReturnFunction<T>;
@@ -30,6 +31,15 @@ function VirtualTable<T>({
   rowClassName,
 }: Props<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
+
+  const tableRef = useRef(null);
+  const btnAction = document.getElementById("export_to_excell");
+
+  const { onDownload } = useDownloadExcel({
+    currentTableRef: tableRef.current,
+    filename: "products",
+    sheet: "products",
+  });
 
   const table = useReactTable({
     data: data || [],
@@ -57,6 +67,15 @@ function VirtualTable<T>({
     overscan: 20,
   });
 
+  const downloadAsPdf = () => onDownload();
+
+  useEffect(() => {
+    if (btnAction)
+      btnAction.addEventListener("click", () => {
+        document.getElementById("consumption_stat")?.click();
+      });
+  }, [btnAction]);
+
   return (
     <div
       ref={parentRef}
@@ -66,7 +85,7 @@ function VirtualTable<T>({
         style={{ height: `${virtualizer.getTotalSize() + 150}px` }}
         className="overflow-x-auto"
       >
-        <table className="table table-bordered w-full">
+        <table className="table table-bordered w-full" ref={tableRef}>
           <thead>
             {data &&
               table.getHeaderGroups().map((headerGroup) => (
@@ -139,6 +158,13 @@ function VirtualTable<T>({
 
         {!data?.length && <EmptyList />}
       </div>
+      <button
+        id={"consumption_stat"}
+        className="hidden"
+        onClick={downloadAsPdf}
+      >
+        download
+      </button>
     </div>
   );
 }

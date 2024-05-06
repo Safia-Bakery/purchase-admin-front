@@ -8,7 +8,7 @@ import { useNavigateParams } from "custom/useCustomNavigate";
 import Loading from "@/components/Loader";
 import Suspend from "@/components/Suspend";
 import { BtnTypes, ModalTypes, OrderStatus } from "@/utils/types";
-import { dateTimeFormat } from "@/utils/helpers";
+import { dateTimeFormat, excelBtnId } from "@/utils/helpers";
 import Container from "@/components/Container";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
@@ -110,7 +110,7 @@ const ShowForemenOrder = () => {
           title={`${t("order")} №${id}`}
           subTitle={`${t("status")}: ${t(OrderStatus[order?.status!])}`}
         >
-          <Button btnType={BtnTypes.success} id="export_to_excell">
+          <Button btnType={BtnTypes.success} id={excelBtnId}>
             Excel
           </Button>
           <Button

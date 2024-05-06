@@ -11,6 +11,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode, useEffect, useRef, useState } from "react";
 import EmptyList from "../EmptyList";
 import { useDownloadExcel } from "react-export-table-to-excel";
+import { excelBtnId } from "@/utils/helpers";
 
 type ReturnFunction<Tval> = (smt: Tval) => string;
 type RowClassName<T> = string | ReturnFunction<T>;
@@ -33,7 +34,7 @@ function VirtualTable<T>({
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const tableRef = useRef(null);
-  const btnAction = document.getElementById("export_to_excell");
+  const btnAction = document.getElementById(excelBtnId);
 
   const { onDownload } = useDownloadExcel({
     currentTableRef: tableRef.current,
@@ -72,7 +73,7 @@ function VirtualTable<T>({
   useEffect(() => {
     if (btnAction)
       btnAction.addEventListener("click", () => {
-        document.getElementById("consumption_stat")?.click();
+        document.getElementById("table_id")?.click();
       });
   }, [btnAction]);
 
@@ -158,11 +159,7 @@ function VirtualTable<T>({
 
         {!data?.length && <EmptyList />}
       </div>
-      <button
-        id={"consumption_stat"}
-        className="hidden"
-        onClick={downloadAsPdf}
-      >
+      <button id={"table_id"} className="hidden" onClick={downloadAsPdf}>
         download
       </button>
     </div>

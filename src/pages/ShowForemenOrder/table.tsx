@@ -1,40 +1,92 @@
+import { useEffect, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
-
-import { ExpenditureToolType, Operations } from "@/utils/types";
-import useExpenditure from "@/hooks/useExpenditure";
-import VirtualTable from "@/components/VirtualTable";
-import { ColumnDef } from "@tanstack/react-table";
 import { useForm } from "react-hook-form";
+import { ColumnDef } from "@tanstack/react-table";
+import VirtualTable from "@/components/VirtualTable";
+import Loading from "@/components/Loader";
+import removeItemMutation from "@/hooks/mutation/removeItem";
+import toolCountMutation from "@/hooks/mutation/toolCount";
+import { errorToast, successToast } from "@/utils/toast";
+import { ExpenditureToolType } from "@/utils/types";
+import useExpenditure from "@/hooks/useExpenditure";
+import { debounce } from "@/utils/helpers";
 
 const ProdsTable = () => {
   const { t } = useTranslation();
-  const { id } = useParams();
-  const { getValues, reset, setValue, register } = useForm();
-
-  const { data } = useExpenditure({ id: id });
+  const { id } = useParams<{ id: string }>();
+  const { getValues, reset, setValue, register } = useForm<{
+    [key: string]: number;
+  }>();
+  const { mutate, isPending } = removeItemMutation();
+  const { mutate: updateCount, isPending: updateCountPending } =
+    toolCountMutation();
+  const { data, refetch, isFetching } = useExpenditure({ id });
 
   const order = data?.items?.[0];
 
-  const handleValue =
-    ({ id, op }: { id: number; op: Operations }) =>
-    () => {
-      setValue(
-        `${id}`,
-        op === Operations.decrement
-          ? +getValues(`${id}`) - 1
-          : +getValues(`${id}`) + 1
+  const deleteItem = useCallback(
+    (id: number) => {
+      mutate(
+        { id },
+        {
+          onSuccess: () => {
+            refetch();
+            successToast("success");
+          },
+          onError: (e) => errorToast(e.message),
+        }
       );
-    };
+    },
+    [mutate, refetch]
+  );
+
+  // Debounce function directly in useCallback
+  const debouncedUpdateCount = useCallback(
+    debounce((tool_id: number, amount: number) => {
+      updateCount(
+        { id: tool_id, amount },
+        {
+          onSuccess: () => {
+            refetch();
+            successToast("success");
+          },
+          onError: (e) => errorToast(e.message),
+        }
+      );
+    }, 500),
+    [updateCount]
+  );
+
+  const handleDecrement = useCallback(
+    (tool_id: number) => {
+      const currentValue = getValues(`${tool_id}`);
+      const newValue = currentValue < 1 ? 0 : currentValue - 1;
+      setValue(`${tool_id}`, newValue);
+
+      newValue > 0
+        ? debouncedUpdateCount(tool_id, newValue)
+        : deleteItem(tool_id);
+    },
+    [getValues, setValue, debouncedUpdateCount, deleteItem]
+  );
+
+  const handleIncrement = useCallback(
+    (tool_id: number) => {
+      const newValue = getValues(`${tool_id}`) + 1;
+      setValue(`${tool_id}`, newValue);
+      debouncedUpdateCount(tool_id, newValue);
+    },
+    [getValues, setValue, debouncedUpdateCount]
+  );
 
   useEffect(() => {
     const init = order?.expendituretool.reduce((acc: any, item) => {
-      acc[item?.tool_id!] = item?.amount ?? 0;
+      acc[item?.id!] = item?.amount ?? 0;
       return acc;
     }, {});
     reset(init);
-  }, [order]);
+  }, [order, reset]);
 
   const columns = useMemo<ColumnDef<ExpenditureToolType>[]>(
     () => [
@@ -67,32 +119,28 @@ const ProdsTable = () => {
         header: t("qnt"),
         cell: ({ row }) => (
           <div className="flex gap-2 items-center">
-            {/* <button
+            <button
               className="text-xl"
-              onClick={handleValue({
-                op: Operations.decrement,
-                id: row.original.tool_id,
-              })}
+              type="button"
+              onClick={() => handleDecrement(row.original.id)}
             >
               -
-            </button> */}
+            </button>
 
             <span>
               <input
                 className="w-16 bg-transparent text-center"
                 disabled
-                {...register(`${row.original.tool_id}`)}
+                {...register(`${row.original.id}`)}
               />
             </span>
-            {/* <button
-              onClick={handleValue({
-                op: Operations.increment,
-                id: row.original.tool_id,
-              })}
+            <button
+              onClick={() => handleIncrement(row.original.id)}
               className="text-xl"
+              type="button"
             >
               +
-            </button> */}
+            </button>
             <p className="opacity-0">{row.original.amount}</p>
           </div>
         ),
@@ -101,12 +149,23 @@ const ProdsTable = () => {
         accessorKey: "sum",
         header: t("sum"),
         cell: ({ row }) =>
-          Number(getValues(`${row.original?.tool_id}`)) *
-          row.original?.tool?.price, // row.original?.tool?.price
+          Number(getValues(`${row.original?.id}`)) * row.original?.tool?.price,
+      },
+      {
+        accessorKey: "action",
+        size: 5,
+        header: "",
+        cell: ({ row }) => (
+          <button type="button" onClick={() => deleteItem(row.original.id)}>
+            <img src="/icons/crossRed.svg" alt="delete" />
+          </button>
+        ),
       },
     ],
-    []
+    [t, getValues, handleDecrement, handleIncrement, deleteItem, register]
   );
+
+  if (isPending) return <Loading />;
 
   return <VirtualTable columns={columns} data={order?.expendituretool} />;
 };

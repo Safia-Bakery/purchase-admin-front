@@ -79,3 +79,22 @@ export const RoleObj: { [key: string]: string } = {
   "3": "importer",
   "4": "other",
 };
+
+export const excelBtnId = "export_to_excell";
+
+export function debounce<F extends (...args: any[]) => any>(
+  func: F,
+  wait: number
+) {
+  let timeout: NodeJS.Timeout | null = null;
+
+  return function executedFunction(...args: Parameters<F>) {
+    const later = () => {
+      clearTimeout(timeout!);
+      func(...args);
+    };
+
+    clearTimeout(timeout!);
+    timeout = setTimeout(later, wait);
+  };
+}

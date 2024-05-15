@@ -26,7 +26,6 @@ const MainSelect: FC<Props> = ({
   onFocus,
   ...others
 }) => {
-  const { t } = useTranslation();
   const lang = useAppSelector(langSelector);
   return (
     <select

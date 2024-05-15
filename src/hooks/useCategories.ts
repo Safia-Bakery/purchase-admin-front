@@ -7,7 +7,7 @@ import baseApi from "@/api/baseApi";
 interface Body {
   name?: string;
   id?: number;
-  status?: string;
+  status?: string | number;
   enabled?: boolean;
   page?: number;
 }

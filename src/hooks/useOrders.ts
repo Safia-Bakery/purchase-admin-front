@@ -6,7 +6,9 @@ import baseApi from "@/api/baseApi";
 
 interface Body {
   user_id?: string;
-  status?: number;
+  category_id?: string;
+  created_at?: string;
+  status?: number | string;
   page?: number;
   id?: number;
   enabled?: boolean;

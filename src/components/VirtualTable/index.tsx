@@ -71,16 +71,17 @@ function VirtualTable<T>({
   const downloadAsPdf = () => onDownload();
 
   useEffect(() => {
-    if (btnAction)
+    if (btnAction) {
       btnAction.addEventListener("click", () => {
         document.getElementById("table_id")?.click();
       });
+    }
   }, [btnAction]);
 
   return (
     <div
       ref={parentRef}
-      className={`${className} w-full bg-white h-[600px] overflow-auto`}
+      className={`${className} w-full bg-white overflow-auto`}
     >
       <div
         style={{ height: `${virtualizer.getTotalSize() + 150}px` }}

@@ -1,14 +1,11 @@
-import { useState } from "react";
+import { useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Card from "@/components/Card";
 import Pagination from "@/components/Pagination";
 import { dateTimeFormat, handleIdx } from "@/utils/helpers";
-import TableHead from "@/components/TableHead";
-import TableViewBtn from "@/components/TableViewBtn";
 import ItemsCount from "@/components/ItemsCount";
 import useQueryString from "custom/useQueryString";
 
-import EmptyList from "@/components/EmptyList";
 import Loading from "@/components/Loader";
 import { useTranslation } from "react-i18next";
 import { BtnTypes, OrderStatus, OrderType } from "@/utils/types";
@@ -18,27 +15,74 @@ import { useAppSelector } from "@/store/rootConfig";
 import { langSelector } from "@/store/reducers/selects";
 import useOrders from "@/hooks/useOrders";
 import dayjs from "dayjs";
-
-const column = [
-  { name: "№", key: "" },
-  { name: "order_number", key: "name" },
-  { name: "client", key: "name" },
-  { name: "category", key: "category" },
-  { name: "created_at", key: "created_at" },
-  { name: "status", key: "status" },
-  { name: "", key: "" },
-];
+import VirtualTable from "@/components/VirtualTable";
+import { ColumnDef } from "@tanstack/react-table";
+import OrdersFilter from "./filter";
 
 const Orders = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [sort, $sort] = useState<OrderType[]>();
   const lang = useAppSelector(langSelector);
   const page = Number(useQueryString("page")) || 1;
+  const status = useQueryString("status");
+  const user_id = useQueryString("user_id");
+  const category_id = useQueryString("category_id");
+  const created_at = useQueryString("created_at");
+  const id = Number(useQueryString("id"));
   const { data: orders, isLoading } = useOrders({
     page,
+    ...(!!status?.toString() && { status }),
+    ...(!!id && { id }),
+    ...(!!user_id && { user_id }),
+    ...(!!category_id && { category_id }),
+    ...(!!created_at && { created_at }),
   });
-  const handleNavigate = (route: string) => navigate(route);
+
+  const columns = useMemo<ColumnDef<OrderType>[]>(
+    () => [
+      {
+        accessorKey: "№",
+        header: "№",
+        size: 5,
+        cell: ({ row }) => handleIdx(row.index),
+      },
+      {
+        accessorKey: "id",
+        size: 5,
+        header: t("order_number"),
+        cell: ({ row }) => (
+          <Link className="text-blue-500" to={`${row.original.id}`}>
+            {row.original.id}
+          </Link>
+        ),
+      },
+      {
+        accessorKey: "client",
+        header: t("client"),
+        cell: ({ row }) => row.original?.user?.name,
+      },
+      {
+        accessorKey: "category",
+        header: t("category"),
+        cell: ({ row }) => row.original?.category?.[`name_${lang}`],
+      },
+      {
+        accessorKey: "created_at",
+        header: t("created_at"),
+        size: 10,
+        cell: ({ row }) =>
+          dayjs(row.original?.created_at).format(dateTimeFormat),
+      },
+      {
+        accessorKey: "status",
+        header: t("status"),
+        cell: ({ row }) => t(OrderStatus[row.original.status]),
+      },
+    ],
+    [lang]
+  );
+
+  if (isLoading) return <Loading />;
 
   return (
     <Card>
@@ -46,8 +90,7 @@ const Orders = () => {
         <div className="flex gap-2">
           <Button
             btnType={BtnTypes.primary}
-            onClick={() => navigate(-1)}
-            className="btn btn-primary btn-fill"
+            onClick={() => navigate("/orders")}
           >
             {t("back")}
           </Button>
@@ -55,39 +98,15 @@ const Orders = () => {
       </Header>
 
       <div className="p-4">
-        <div className="table-responsive grid-view">
+        <div>
           <ItemsCount data={orders} />
-          <table className="table table-hover">
-            <TableHead
-              column={column}
-              onSort={(data) => $sort(data)}
-              data={orders?.items}
-            />
 
-            <tbody>
-              {!!orders?.items?.length &&
-                (sort?.length ? sort : orders?.items)?.map((order, idx) => (
-                  <tr key={idx} className="bg-blue">
-                    <td width="40">{handleIdx(idx)}</td>
-                    <td width="80">
-                      <Link to={`${order.id}`}>{order.id}</Link>
-                    </td>
-                    <td>{order?.user?.name}</td>
-                    <td>{order?.category?.[`name_${lang}`]}</td>
-                    <td>{dayjs(order.created_at).format(dateTimeFormat)}</td>
-                    <td>{t(OrderStatus[order?.status])}</td>
-                    <td width={40}>
-                      <TableViewBtn
-                        onClick={() => handleNavigate(order.id.toString())}
-                      />
-                    </td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-          {isLoading && <Loading />}
+          <VirtualTable columns={columns} data={orders?.items}>
+            <OrdersFilter />
+          </VirtualTable>
 
-          {!orders?.items?.length && !isLoading && <EmptyList />}
+          {/* {isLoading && <Loading />} */}
+          {/* {!orders?.items?.length && !isLoading && <EmptyList />} */}
           {!!orders && <Pagination totalPages={orders.pages} />}
         </div>
       </div>

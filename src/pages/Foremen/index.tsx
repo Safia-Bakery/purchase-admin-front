@@ -34,10 +34,7 @@ const Foremen = () => {
         accessorKey: "id",
         size: 5,
         header: "№",
-        cell: ({ row }) =>
-          // <Link className="text-blue-500" to={`${row.original.id}`}>
-          row.original.id,
-        // </Link>
+        cell: ({ row }) => row.original.id,
       },
       {
         accessorKey: "name",

@@ -22,6 +22,7 @@ interface Props<TData> {
   className?: string;
   children?: ReactNode;
   rowClassName?: RowClassName<Row<TData>>;
+  exHeight?: number;
 }
 
 function VirtualTable<T>({
@@ -30,6 +31,7 @@ function VirtualTable<T>({
   className,
   children,
   rowClassName,
+  exHeight = 0,
 }: Props<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -84,7 +86,7 @@ function VirtualTable<T>({
       className={`${className} w-full bg-white overflow-auto`}
     >
       <div
-        style={{ height: `${virtualizer.getTotalSize() + 150}px` }}
+        style={{ height: `${virtualizer.getTotalSize() + exHeight}px` }}
         className="overflow-x-auto"
       >
         <table className="table table-bordered w-full" ref={tableRef}>

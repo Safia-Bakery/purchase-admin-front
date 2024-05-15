@@ -8,9 +8,14 @@ import Loading from "@/components/Loader";
 import removeItemMutation from "@/hooks/mutation/removeItem";
 import toolCountMutation from "@/hooks/mutation/toolCount";
 import { errorToast, successToast } from "@/utils/toast";
-import { ExpenditureToolType } from "@/utils/types";
+import { ExpenditureToolType, OrderStatus } from "@/utils/types";
 import useExpenditure from "@/hooks/useExpenditure";
 import { debounce } from "@/utils/helpers";
+
+const disableAction: { [key: number]: boolean } = {
+  [OrderStatus.denied]: true,
+  [OrderStatus.done]: true,
+};
 
 const ProdsTable = () => {
   const { t } = useTranslation();
@@ -41,7 +46,6 @@ const ProdsTable = () => {
     [mutate, refetch]
   );
 
-  // Debounce function directly in useCallback
   const debouncedUpdateCount = useCallback(
     debounce((tool_id: number, amount: number) => {
       updateCount(
@@ -79,6 +83,13 @@ const ProdsTable = () => {
     },
     [getValues, setValue, debouncedUpdateCount]
   );
+
+  const renderTotal = useMemo(() => {
+    return order?.expendituretool.reduce(
+      (acc, item) => acc + item.tool.price * item.amount,
+      0
+    );
+  }, [order]);
 
   useEffect(() => {
     const init = order?.expendituretool.reduce((acc: any, item) => {
@@ -119,13 +130,15 @@ const ProdsTable = () => {
         header: t("qnt"),
         cell: ({ row }) => (
           <div className="flex gap-2 items-center">
-            <button
-              className="text-xl"
-              type="button"
-              onClick={() => handleDecrement(row.original.id)}
-            >
-              -
-            </button>
+            {!disableAction[order?.status!] && (
+              <button
+                className="text-xl"
+                type="button"
+                onClick={() => handleDecrement(row.original.id)}
+              >
+                -
+              </button>
+            )}
 
             <span>
               <input
@@ -134,13 +147,15 @@ const ProdsTable = () => {
                 {...register(`${row.original.id}`)}
               />
             </span>
-            <button
-              onClick={() => handleIncrement(row.original.id)}
-              className="text-xl"
-              type="button"
-            >
-              +
-            </button>
+            {!disableAction[order?.status!] && (
+              <button
+                onClick={() => handleIncrement(row.original.id)}
+                className="text-xl"
+                type="button"
+              >
+                +
+              </button>
+            )}
             <p className="opacity-0">{row.original.amount}</p>
           </div>
         ),
@@ -155,19 +170,37 @@ const ProdsTable = () => {
         accessorKey: "action",
         size: 5,
         header: "",
-        cell: ({ row }) => (
-          <button type="button" onClick={() => deleteItem(row.original.id)}>
-            <img src="/icons/crossRed.svg" alt="delete" />
-          </button>
-        ),
+        cell: ({ row }) =>
+          !disableAction[order?.status!] && (
+            <button type="button" onClick={() => deleteItem(row.original.id)}>
+              <img src="/icons/crossRed.svg" alt="delete" />
+            </button>
+          ),
       },
     ],
-    [t, getValues, handleDecrement, handleIncrement, deleteItem, register]
+    [
+      t,
+      getValues,
+      handleDecrement,
+      handleIncrement,
+      deleteItem,
+      register,
+      order?.status,
+    ]
   );
 
   if (isPending) return <Loading />;
 
-  return <VirtualTable columns={columns} data={order?.expendituretool} />;
+  return (
+    <>
+      <VirtualTable columns={columns} data={order?.expendituretool} />
+      <div className="w-full flex justify-end pr-10 my-4">
+        <h1 className="text-3xl font-bold">
+          {t("total")}: {renderTotal}
+        </h1>
+      </div>
+    </>
+  );
 };
 
 export default ProdsTable;

@@ -70,7 +70,7 @@ const ForemenOrders = () => {
       <div className="p-4">
         <div className="table-responsive grid-view">
           <ItemsCount data={orders} />
-          <VirtualTable columns={columns} data={orders?.items} />
+          <VirtualTable columns={columns} data={orders?.items} exHeight={100} />
           {isFetching && <Loading />}
 
           {!!orders && <Pagination totalPages={orders.pages} />}

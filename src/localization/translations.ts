@@ -121,6 +121,7 @@ const localization = {
       sum: "Сумма",
       branch: "Филиал",
       "foreman-orders": "Заявки на бригадиров",
+      total: "В общем",
     },
   },
   uz: {

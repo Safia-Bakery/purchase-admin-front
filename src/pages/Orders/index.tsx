@@ -101,7 +101,7 @@ const Orders = () => {
         <div>
           <ItemsCount data={orders} />
 
-          <VirtualTable columns={columns} data={orders?.items}>
+          <VirtualTable columns={columns} data={orders?.items} exHeight={150}>
             <OrdersFilter />
           </VirtualTable>
 

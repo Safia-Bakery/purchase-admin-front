@@ -5,7 +5,7 @@ import MainSelect from "@/components/BaseInputs/MainSelect";
 
 import useCategories from "@/hooks/useCategories";
 import useQueryString from "custom/useQueryString";
-import { StatusName } from "@/utils/helpers";
+import { OrderStatusName, StatusName } from "@/utils/helpers";
 import { useNavigateParams } from "@/hooks/custom/useCustomNavigate";
 import { useForm } from "react-hook-form";
 import useClients from "@/hooks/useClients";
@@ -86,7 +86,7 @@ const OrdersFilter: FC = () => {
       <td className="p-0">
         <BaseInputs className="m-2">
           <MainSelect
-            values={StatusName}
+            values={OrderStatusName}
             value={status}
             onChange={(e) => navigate({ status: e.target.value })}
           />

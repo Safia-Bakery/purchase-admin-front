@@ -12,14 +12,11 @@ import { useTranslation } from "react-i18next";
 import categoryMutation from "@/hooks/mutation/category";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
-import { useAppSelector } from "@/store/rootConfig";
-import { langSelector } from "@/store/reducers/selects";
 
 const EditAddCategory = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const navigate = useNavigate();
-  const lang = useAppSelector(langSelector);
 
   const goBack = () => navigate(-1);
 

@@ -6,11 +6,9 @@ import ItemsCount from "@/components/ItemsCount";
 import useQueryString from "custom/useQueryString";
 import Loading from "@/components/Loader";
 import { useTranslation } from "react-i18next";
-import { BtnTypes, ClientType, OrderStatus } from "@/utils/types";
+import { BtnTypes, ClientType } from "@/utils/types";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
-import { useAppSelector } from "@/store/rootConfig";
-import { langSelector } from "@/store/reducers/selects";
 import { ColumnDef } from "@tanstack/react-table";
 import VirtualTable from "@/components/VirtualTable";
 import useClients from "@/hooks/useClients";
@@ -18,7 +16,6 @@ import useClients from "@/hooks/useClients";
 const Foremen = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const lang = useAppSelector(langSelector);
   const page = Number(useQueryString("page")) || 1;
   const {
     data: foremen,

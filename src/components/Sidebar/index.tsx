@@ -77,8 +77,6 @@ const CustomSidebar = () => {
   const toggleSubItems = (item: string) =>
     $menuItem(item === menuItem ? undefined : item);
 
-  const handleLogout = () => dispatch(logoutHandler());
-
   return (
     <>
       {collapsed && <div className={styles.overlay} onClick={handleOverlay} />}

@@ -15,8 +15,6 @@ import { useTranslation } from "react-i18next";
 import { BtnTypes, CategoryType } from "@/utils/types";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
-import { useAppSelector } from "@/store/rootConfig";
-import { langSelector } from "@/store/reducers/selects";
 
 const column = [
   { name: "№", key: "" },
@@ -30,7 +28,6 @@ const Categories = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [sort, $sort] = useState<CategoryType[]>();
-  const lang = useAppSelector(langSelector);
   const { search } = useLocation();
   const page = Number(useQueryString("page")) || 1;
   const { data: categories, isLoading } = useCategories({

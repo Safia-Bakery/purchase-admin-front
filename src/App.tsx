@@ -87,6 +87,7 @@ const App = () => {
       >
         <Route
           path={"orders"}
+          index
           element={
             <Suspend>
               <Orders />

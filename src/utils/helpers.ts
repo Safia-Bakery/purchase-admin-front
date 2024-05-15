@@ -1,6 +1,6 @@
 import useQueryString from "@/hooks/custom/useQueryString";
 import { QueryClient } from "@tanstack/react-query";
-import { FileType } from "./types";
+import { FileType, OrderStatus } from "./types";
 
 export enum EPresetTimes {
   SECOND = 1000,
@@ -39,6 +39,13 @@ export const yearMonthDate = "YYYY-MM-DD";
 export const StatusName = [
   { name_ru: "Активный", name_uz: "Faol", id: 1 },
   { name_ru: "Не активный", name_uz: "faoliyatsiz", id: 0 },
+];
+
+export const OrderStatusName = [
+  { name_ru: "Новый", name_uz: "Yangi", id: OrderStatus.new },
+  { name_ru: "Принят", name_uz: "Qabul qilingan", id: OrderStatus.received },
+  { name_ru: "Закончен", name_uz: "Yakunlangan", id: OrderStatus.done },
+  { name_ru: "Отклонен", name_uz: "Rad etilgan", id: OrderStatus.denied },
 ];
 
 export const detectFileType = (url: string) => {

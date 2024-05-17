@@ -56,6 +56,7 @@ export interface OrderType {
   created_at: string;
   updated_at: string;
   user: UserType;
+  file: {id: number, url: string}[]
   deny_reason?: string;
 }
 

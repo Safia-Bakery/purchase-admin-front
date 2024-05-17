@@ -188,80 +188,104 @@ const ShowRequestApc = () => {
                 className="table table-striped table-bordered detail-view"
               >
                 <tbody>
-                  <tr>
-                    <th>{t("brand")}</th>
-                    <td>{order?.brend}</td>
-                  </tr>
-                  <tr>
-                    <th>{t("group_problem")}</th>
-                    <td>{order?.category?.[`name_${lang}`]}</td>
-                  </tr>
-                  <tr>
-                    <th>{t("productt")}</th>
-                    <td>{order?.product}</td>
-                  </tr>
-                  <tr>
-                    <th className="w-1/3">{t("is_worked")}</th>
-                    <td>{!order?.safia_worker ? t("no") : t("yes")}</td>
-                  </tr>
-                  <tr>
-                    <th>{t("certificates")}</th>
-                    <td>
-                      {order?.sertificate ? (
-                        <button
-                          className="text-blue-500"
-                          onClick={handleShowPhoto(order?.sertificate)}
-                        >
-                          {t("file")}
-                        </button>
-                      ) : (
-                        t("not_given")
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>{t("commertial_reqs")}</th>
-                    <td>
-                      {order?.sertificate ? (
-                        <button
-                          className="text-blue-500"
-                          onClick={handleShowPhoto(order?.brochure)}
-                        >
-                          {t("file")}
-                        </button>
-                      ) : (
-                        t("not_given")
-                      )}
-                    </td>
-                  </tr>
+                <tr>
+                  <th>{t("brand")}</th>
+                  <td>{order?.brend}</td>
+                </tr>
+                <tr>
+                  <th>{t("group_problem")}</th>
+                  <td>{order?.category?.[`name_${lang}`]}</td>
+                </tr>
+                <tr>
+                  <th>{t("productt")}</th>
+                  <td>{order?.product}</td>
+                </tr>
+                <tr>
+                  <th className="w-1/3">{t("is_worked")}</th>
+                  <td>{!order?.safia_worker ? t("no") : t("yes")}</td>
+                </tr>
 
-                  <tr>
-                    <th>{t("receipt_date")}</th>
-                    <td>
-                      {order?.created_at
+                <tr>
+                  <th>{t("uploaded_images")}</th>
+                  <td>
+                    <div className="flex flex-col w-12">
+                      {order?.file.length ?
+                          order?.file.map((file) => (
+                              <button key={file.id}
+                                  className="text-blue-500"
+                                  onClick={handleShowPhoto(file.url)}
+                              >
+                                {t("file")}
+                              </button>
+                          ))
+                          : (
+                              t("not_given")
+                          )}
+                    </div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <th>{t("certificates")}</th>
+                  <td>
+
+                      {order?.sertificate ? (
+                          <button
+                              className="text-blue-500"
+                              onClick={handleShowPhoto(order?.sertificate)}
+                          >
+                            {t("file")}
+                          </button>
+                      ) : (
+                          t("not_given")
+                      )}
+
+
+                  </td>
+                </tr>
+                <tr>
+                  <th>{t("commertial_reqs")}</th>
+                  <td>
+                    {order?.sertificate ? (
+                        <button
+                            className="text-blue-500"
+                            onClick={handleShowPhoto(order?.brochure)}
+                        >
+                          {t("file")}
+                        </button>
+                    ) : (
+                        t("not_given")
+                    )}
+                  </td>
+                </tr>
+
+                <tr>
+                  <th>{t("receipt_date")}</th>
+                  <td>
+                    {order?.created_at
                         ? dayjs(order?.created_at).format(dateTimeFormat)
                         : t("not_given")}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>{t("updated_at")}</th>
-                    <td>
-                      {order?.updated_at
+                  </td>
+                </tr>
+                <tr>
+                  <th>{t("updated_at")}</th>
+                  <td>
+                    {order?.updated_at
                         ? dayjs(order?.updated_at).format(dateTimeFormat)
                         : t("not_given")}
-                    </td>
-                  </tr>
-                  {order?.deny_reason && (
+                  </td>
+                </tr>
+                {order?.deny_reason && (
                     <tr>
                       <th>{t("deny_reason")}</th>
                       <td>{order?.deny_reason}</td>
                     </tr>
-                  )}
+                )}
                 </tbody>
               </table>
             </div>
           </div>
-          <hr />
+          <hr/>
           {renderBtns}
         </div>
       </Container>

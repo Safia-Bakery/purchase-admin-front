@@ -22,9 +22,7 @@ const SelectProduct = () => {
 
   const { mutate, isPending } = expenditureMutation();
 
-  const handleChange = (items: MultiValue<SelectValue>) => {
-    $selected(items);
-  };
+  const handleChange = (items: MultiValue<SelectValue>) => $selected(items);
 
   const { getValues, reset, setValue, register, handleSubmit } = useForm();
 
@@ -48,21 +46,19 @@ const SelectProduct = () => {
     );
   };
 
-  const handleValue =
-    ({ id, op }: { id: number; op: Operations }) =>
-    () => {
-      setValue(
-        `${id}`,
-        op === Operations.decrement
-          ? +getValues(`${id}`) - 1
-          : +getValues(`${id}`) + 1
-      );
-    };
+  const handleIncrement = (id: number) =>
+    setValue(`${id}`, +getValues(`${id}`) + 1);
+
+  const handleDecrement = (id: number) => {
+    return +getValues(`${id}`) > 1
+      ? setValue(`${id}`, +getValues(`${id}`) - 1)
+      : $selected(selected?.filter((item) => id !== item.value));
+  };
 
   useEffect(() => {
     if (selected?.length) {
       const init = selected.reduce((acc: any, item) => {
-        acc[item?.value!] = item?.count ?? 0;
+        acc[item?.value!] = +getValues(`${item.value}`) || item?.count;
         return acc;
       }, {});
       reset(init);
@@ -90,10 +86,7 @@ const SelectProduct = () => {
                     <button
                       type="button"
                       className="text-xl"
-                      onClick={handleValue({
-                        op: Operations.decrement,
-                        id: item.value,
-                      })}
+                      onClick={() => handleDecrement(item.value)}
                     >
                       -
                     </button>
@@ -106,10 +99,7 @@ const SelectProduct = () => {
                     </span>
                     <button
                       type="button"
-                      onClick={handleValue({
-                        op: Operations.increment,
-                        id: item.value,
-                      })}
+                      onClick={() => handleIncrement(item.value)}
                       className="text-xl"
                     >
                       +

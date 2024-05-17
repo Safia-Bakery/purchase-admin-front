@@ -65,12 +65,10 @@ const ProdsTable = () => {
   const handleDecrement = useCallback(
     (tool_id: number) => {
       const currentValue = getValues(`${tool_id}`);
-      const newValue = currentValue < 1 ? 0 : currentValue - 1;
+      const newValue = currentValue < 2 ? 0 : currentValue - 1;
       setValue(`${tool_id}`, newValue);
 
-      newValue > 0
-        ? debouncedUpdateCount(tool_id, newValue)
-        : deleteItem(tool_id);
+      newValue > 1 && debouncedUpdateCount(tool_id, newValue);
     },
     [getValues, setValue, debouncedUpdateCount, deleteItem]
   );

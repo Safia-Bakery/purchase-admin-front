@@ -141,6 +141,7 @@ const SelectProduct = ({ is_web }: Props) => {
         <MainTextArea
           register={register("comment")}
           placeholder={t("comments")}
+          className="mt-4"
         />
       )}
 

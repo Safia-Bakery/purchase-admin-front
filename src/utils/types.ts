@@ -143,6 +143,7 @@ export interface ExpenditureType {
   branch_id: number;
   status: number;
   comment: string;
+  total_sum: number;
   expendituretool: ExpenditureToolType[];
   created_at: string;
   updated_at: string;

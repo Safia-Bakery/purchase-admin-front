@@ -43,7 +43,7 @@ const ForemenOrders = () => {
         cell: ({ row }) => row.original?.branch?.name,
       },
       {
-        accessorKey: "subcategory",
+        accessorKey: "total_sum",
         header: t("sum_order"),
       },
       {

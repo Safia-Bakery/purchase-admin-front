@@ -146,7 +146,7 @@ const ShowForemenOrder = () => {
 
                   <tr>
                     <th>{t("total_summ")}</th>
-                    <td>{"total summ of order calculate"}</td>
+                    <td>{order?.total_sum ?? 0}</td>
                   </tr>
                 </tbody>
               </table>

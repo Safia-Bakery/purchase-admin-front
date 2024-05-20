@@ -65,10 +65,10 @@ const ProdsTable = () => {
   const handleDecrement = useCallback(
     (tool_id: number) => {
       const currentValue = getValues(`${tool_id}`);
-      const newValue = currentValue < 2 ? 0 : currentValue - 1;
-      setValue(`${tool_id}`, newValue);
+      const newValue = currentValue < 1 ? currentValue : currentValue - 1;
+      newValue > 0 && setValue(`${tool_id}`, newValue);
 
-      newValue > 1 && debouncedUpdateCount(tool_id, newValue);
+      newValue > 0 && debouncedUpdateCount(tool_id, newValue);
     },
     [getValues, setValue, debouncedUpdateCount, deleteItem]
   );
@@ -191,7 +191,11 @@ const ProdsTable = () => {
 
   return (
     <>
-      <VirtualTable columns={columns} data={order?.expendituretool} />
+      <VirtualTable
+        columns={columns}
+        data={order?.expendituretool}
+        exHeight={120}
+      />
       <div className="w-full flex justify-end pr-10 my-4">
         <h1 className="text-3xl font-bold">
           {t("total")}: {renderTotal}

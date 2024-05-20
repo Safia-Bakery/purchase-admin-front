@@ -56,13 +56,14 @@ export interface OrderType {
   created_at: string;
   updated_at: string;
   user: UserType;
-  file: {id: number, url: string}[]
+  file: { id: number; url: string }[];
   deny_reason?: string;
 }
 
 export enum ModalTypes {
   image,
   deny_reason,
+  add_prods,
 }
 export enum FileType {
   other,

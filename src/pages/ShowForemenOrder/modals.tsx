@@ -1,23 +1,22 @@
 import cl from "classnames";
 import { useTranslation } from "react-i18next";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Modal from "@/components/Modal";
-import { FileType, ModalTypes, OrderStatus } from "@/utils/types";
+import { ModalTypes, OrderStatus } from "@/utils/types";
 import BaseInput from "@/components/BaseInputs";
 import MainTextArea from "@/components/BaseInputs/MainTextArea";
-import { CancelReason, detectFileType } from "@/utils/helpers";
+import { CancelReason } from "@/utils/helpers";
 import MainSelect from "@/components/BaseInputs/MainSelect";
 import { errorToast, successToast } from "@/utils/toast";
-import useOrder from "@/hooks/useOrders";
 import useQueryString from "custom/useQueryString";
 import { useRemoveParams } from "custom/useCustomNavigate";
 import Loading from "@/components/Loader";
-import orderMutation from "@/hooks/mutation/orders";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
 import expenditureMutation from "@/hooks/mutation/expenditure";
 import useExpenditure from "@/hooks/useExpenditure";
+import SelectProduct from "@/tg-routes/SelectProduct";
 
 const Modals = () => {
   const { t } = useTranslation();
@@ -129,7 +128,17 @@ const Modals = () => {
       //       </Link>
       //     </div>
       //   );
-
+      case ModalTypes.add_prods:
+        return (
+          <div className="w-96">
+            <Header title="add_products">
+              <button onClick={closeModal}>
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </Header>
+            <SelectProduct is_web />
+          </div>
+        );
       default:
         return;
     }

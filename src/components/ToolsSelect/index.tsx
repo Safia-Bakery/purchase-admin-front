@@ -1,5 +1,5 @@
 import { FC, useEffect } from "react";
-import Select, { MultiValue } from "react-select";
+import Select, { ActionMeta, MultiValue } from "react-select";
 import { useState } from "react";
 import useDebounce from "custom/useDebounce";
 import useToolsSearch from "@/hooks/useToolsSearch";
@@ -12,7 +12,7 @@ interface Props {
   warehouse?: boolean;
   placeholder?: string;
   autoFocus?: boolean;
-  onChange: (arg: MultiValue<SelectValue>) => void;
+  onChange: (arg: SelectValue) => void;
 }
 
 const ToolsSelect: FC<Props> = ({
@@ -30,9 +30,8 @@ const ToolsSelect: FC<Props> = ({
 
   const [items, $items] = useState<SelectValue[]>([]);
 
-  const handleChange = (e: MultiValue<SelectValue>) => {
-    onChange(e);
-  };
+  const handleChange = (_: any, actionMeta: ActionMeta<SelectValue>) =>
+    actionMeta.option && onChange(actionMeta.option);
 
   useEffect(() => {
     if (data?.items?.length)
@@ -67,6 +66,7 @@ const ToolsSelect: FC<Props> = ({
       className="z-50 branch-select"
       onInputChange={(e) => $query(e)}
       isClearable
+      backspaceRemovesValue={false}
       autoFocus={autoFocus}
       placeholder={placeholder}
     />

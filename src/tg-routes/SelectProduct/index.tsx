@@ -3,26 +3,37 @@ import MainTextArea from "@/components/BaseInputs/MainTextArea";
 import Button from "@/components/Button";
 import Loading from "@/components/Loader";
 import ToolsSelect from "@/components/ToolsSelect";
+import { useRemoveParams } from "@/hooks/custom/useCustomNavigate";
 import useQueryString from "@/hooks/custom/useQueryString";
 import expenditureMutation from "@/hooks/mutation/expenditure";
+import useExpenditure from "@/hooks/useExpenditure";
 import { errorToast } from "@/utils/toast";
-import { BtnTypes, Operations, SelectValue } from "@/utils/types";
+import { BtnTypes, SelectValue } from "@/utils/types";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { MultiValue } from "react-select";
+import { useParams } from "react-router-dom";
 
-const SelectProduct = () => {
+type Props = {
+  is_web?: boolean;
+};
+
+const SelectProduct = ({ is_web }: Props) => {
   const { t } = useTranslation();
-  const [selected, $selected] = useState<MultiValue<SelectValue>>();
+  const { id } = useParams();
+  const [selected, $selected] = useState<SelectValue[]>([]);
   const client_id = Number(useQueryString("client_id"));
+  const removeParams = useRemoveParams();
+
+  const { refetch: orderRefetch } = useExpenditure({ id, enabled: !!id });
 
   const branchJson = useQueryString("branch");
   const branch = branchJson && JSON.parse(branchJson);
 
   const { mutate, isPending } = expenditureMutation();
 
-  const handleChange = (items: MultiValue<SelectValue>) => $selected(items);
+  const handleChange = (items: SelectValue) =>
+    $selected((prev) => [...prev, items]);
 
   const { getValues, reset, setValue, register, handleSubmit } = useForm();
 
@@ -31,29 +42,34 @@ const SelectProduct = () => {
     mutate(
       {
         tools: { ...others },
-        branch_id: branch.id,
-        client_id,
-        comment,
+        ...(branch?.id && { branch_id: branch.id }),
+        ...(client_id && { client_id }),
+        ...(comment && { comment }),
+        ...(id && { id: +id }),
       },
       {
         onSuccess: (data: { success: boolean; id: number }) => {
-          window.location.replace(
-            `/tg/success/${data.id}?icon=tick&title=ready`
-          );
+          if (is_web) {
+            orderRefetch();
+            removeParams(["modal"]);
+          } else
+            window.location.replace(
+              `/tg/success/${data.id}?icon=tick&title=ready`
+            );
         },
         onError: (e) => errorToast(e.message),
       }
     );
   };
 
+  const handleRemove = (id: number) =>
+    $selected(selected?.filter((item) => id !== item.value));
+
   const handleIncrement = (id: number) =>
     setValue(`${id}`, +getValues(`${id}`) + 1);
 
-  const handleDecrement = (id: number) => {
-    return +getValues(`${id}`) > 1
-      ? setValue(`${id}`, +getValues(`${id}`) - 1)
-      : $selected(selected?.filter((item) => id !== item.value));
-  };
+  const handleDecrement = (id: number) =>
+    +getValues(`${id}`) > 1 && setValue(`${id}`, +getValues(`${id}`) - 1);
 
   useEffect(() => {
     if (selected?.length) {
@@ -106,20 +122,30 @@ const SelectProduct = () => {
                     </button>
                   </div>
                 </td>
+
+                <td>
+                  <button
+                    type="button"
+                    onClick={() => handleRemove(item.value)}
+                  >
+                    <img src="/icons/crossRed.svg" alt="delete" />
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
 
-      <MainTextArea
-        register={register("comment")}
-        placeholder={t("comments")}
-        className="my-4"
-      />
+      {!is_web && (
+        <MainTextArea
+          register={register("comment")}
+          placeholder={t("comments")}
+        />
+      )}
 
-      <Button className="w-full" btnType={BtnTypes.primary} type="submit">
-        {t("next")}
+      <Button className="w-full mt-4" btnType={BtnTypes.primary} type="submit">
+        {t(is_web ? "add" : "next")}
       </Button>
     </form>
   );

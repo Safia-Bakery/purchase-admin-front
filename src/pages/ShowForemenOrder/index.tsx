@@ -187,7 +187,14 @@ const ShowForemenOrder = () => {
           </div>
           <hr />
 
-          <Header title={t("products")} />
+          <Header title={"products"}>
+            <Button
+              btnType={BtnTypes.success}
+              onClick={() => navigateParams({ modal: ModalTypes.add_prods })}
+            >
+              {t("add_products")}
+            </Button>
+          </Header>
           <ProdsTable />
 
           {renderBtns}

@@ -13,6 +13,7 @@ const localization = {
       uz: "O'zbekcha",
       categories: "Категории",
       products: "Товары",
+      add_products: "Добавить товары",
       all: "Все",
       raw_materials: "Сырье",
       date_from: "Дата поставки",
@@ -122,7 +123,7 @@ const localization = {
       branch: "Филиал",
       "foreman-orders": "Заявки на бригадиров",
       total: "В общем",
-      uploaded_images: "Картинки товара"
+      uploaded_images: "Картинки товара",
     },
   },
   uz: {

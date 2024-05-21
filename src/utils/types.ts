@@ -41,23 +41,30 @@ export interface OredersType extends BasePaginate {
   items: OrderType[];
 }
 
+export interface FileTypes {
+  id: number;
+  url: string;
+}
+
 export interface OrderType {
   id: number;
   user_id: number;
   status: number;
-  brend: string;
+  brend: null | string;
   product: string;
   role: string;
-  sertificate: string;
-  brochure: string;
   category_id: number;
-  category: CategoryType;
   safia_worker: true;
   created_at: string;
-  updated_at: string;
+  updated_at: string | null;
+  category: CategoryType;
   user: UserType;
-  file: { id: number; url: string }[];
+  price: number;
+  product_images: FileTypes[];
+
+  brochures: FileTypes[];
   deny_reason?: string;
+  sertificates: FileTypes[];
 }
 
 export enum ModalTypes {

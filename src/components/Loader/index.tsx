@@ -13,6 +13,7 @@ const Loading: FC<Props> = ({ is_static = false, className }) => {
     <div
       className={cl(className, styles.wrap, { [styles.absolute]: !is_static })}
     >
+      <div className={styles.overlay} />
       <img
         className={styles.loadingCircle}
         src={safiaLogo}

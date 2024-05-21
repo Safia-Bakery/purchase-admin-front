@@ -47,3 +47,8 @@ th {
   border: 1px solid #b4b4b3;
   padding: 7px 5px;
 }
+.branch-select {
+  input {
+    min-width: 200px !important;
+  }
+}

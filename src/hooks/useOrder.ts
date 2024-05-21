@@ -1,28 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
 import { tokenSelector } from "reducers/auth";
 import { useAppSelector } from "@/store/rootConfig";
-import { OredersType } from "@/utils/types";
+import { OrderType } from "@/utils/types";
 import baseApi from "@/api/baseApi";
 
 interface Body {
-  user_id?: string;
-  category_id?: string;
-  created_at?: string;
-  status?: number | string;
-  page?: number;
   id?: number;
   enabled?: boolean;
 }
 
-export const useOrders = ({ enabled, ...params }: Body) => {
+export const useOrder = ({ enabled, id }: Body) => {
   const token = useAppSelector(tokenSelector);
   return useQuery({
-    queryKey: ["orders", params],
+    queryKey: ["order", id],
     queryFn: () =>
       baseApi
-        .get("/order", { params })
-        .then(({ data: response }) => response as OredersType),
+        .get(`/order/${id}`)
+        .then(({ data: response }) => response as OrderType),
     enabled: enabled && !!token,
   });
 };
-export default useOrders;
+export default useOrder;

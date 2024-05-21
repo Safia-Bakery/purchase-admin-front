@@ -82,13 +82,6 @@ const ProdsTable = () => {
     [getValues, setValue, debouncedUpdateCount]
   );
 
-  // const renderTotal = useMemo(() => {
-  //   return order?.expendituretool.reduce(
-  //     (acc, item) => acc + item.tool.price * item.amount,
-  //     0
-  //   );
-  // }, [order]);
-
   useEffect(() => {
     const init = order?.expendituretool.reduce((acc: any, item) => {
       acc[item?.id!] = item?.amount ?? 0;

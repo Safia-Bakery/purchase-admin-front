@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 interface Body {
   status: number;
   id: string;
+  deny_reason?: string;
 }
 
 const orderMutation = () => {

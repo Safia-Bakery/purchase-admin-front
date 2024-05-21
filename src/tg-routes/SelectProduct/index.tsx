@@ -108,8 +108,9 @@ const SelectProduct = ({ is_web }: Props) => {
                     </button>
                     <span>
                       <input
-                        className="w-16 bg-transparent text-center"
-                        disabled
+                        className="w-16 bg-transparent text-center outline-none"
+                        type="number" // @ts-ignore
+                        onWheel={(e) => e.target?.blur()}
                         {...register(`${item.value}`)}
                       />
                     </span>

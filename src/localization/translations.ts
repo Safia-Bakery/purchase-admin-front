@@ -124,6 +124,7 @@ const localization = {
       "foreman-orders": "Заявки на бригадиров",
       total: "В общем",
       uploaded_images: "Картинки товара",
+      ordered_date: "Дата оформления",
     },
   },
   uz: {

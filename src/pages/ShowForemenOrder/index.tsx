@@ -8,7 +8,7 @@ import { useNavigateParams } from "custom/useCustomNavigate";
 import Loading from "@/components/Loader";
 import Suspend from "@/components/Suspend";
 import { BtnTypes, ModalTypes, OrderStatus } from "@/utils/types";
-import { dateTimeFormat, excelBtnId } from "@/utils/helpers";
+import { dateTimeFormat, disableAction, excelBtnId } from "@/utils/helpers";
 import Container from "@/components/Container";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
@@ -16,6 +16,7 @@ import { errorToast, successToast } from "@/utils/toast";
 import useExpenditure from "@/hooks/useExpenditure";
 import expenditureMutation from "@/hooks/mutation/expenditure";
 import ProdsTable from "./table";
+import DownloadToolsExcel from "@/components/DownloadToolsExcel";
 
 const Modals = lazy(() => import("./modals"));
 
@@ -92,7 +93,7 @@ const ShowForemenOrder = () => {
   const renderModal = useMemo(() => {
     if (
       !!order?.status.toString() &&
-      (order?.status < OrderStatus.done || modal === ModalTypes.image)
+      (!disableAction[order?.status!] || modal === ModalTypes.image)
     )
       return (
         <Suspend>
@@ -110,9 +111,7 @@ const ShowForemenOrder = () => {
           title={`${t("order")} №${id}`}
           subTitle={`${t("status")}: ${t(OrderStatus[order?.status!])}`}
         >
-          <Button btnType={BtnTypes.success} id={excelBtnId}>
-            Excel
-          </Button>
+          <DownloadToolsExcel />
           <Button
             onClick={handleBack}
             btnType={BtnTypes.primary}
@@ -188,12 +187,14 @@ const ShowForemenOrder = () => {
           <hr />
 
           <Header title={"products"}>
-            <Button
-              btnType={BtnTypes.success}
-              onClick={() => navigateParams({ modal: ModalTypes.add_prods })}
-            >
-              {t("add_products")}
-            </Button>
+            {!disableAction[order?.status!] && (
+              <Button
+                btnType={BtnTypes.success}
+                onClick={() => navigateParams({ modal: ModalTypes.add_prods })}
+              >
+                {t("add_products")}
+              </Button>
+            )}
           </Header>
           <ProdsTable />
 

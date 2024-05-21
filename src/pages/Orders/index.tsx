@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Card from "@/components/Card";
 import Pagination from "@/components/Pagination";
-import { dateTimeFormat, handleIdx } from "@/utils/helpers";
+import { OrderStatusName, dateTimeFormat, handleIdx } from "@/utils/helpers";
 import ItemsCount from "@/components/ItemsCount";
 import useQueryString from "custom/useQueryString";
 
@@ -18,10 +18,14 @@ import dayjs from "dayjs";
 import VirtualTable from "@/components/VirtualTable";
 import { ColumnDef } from "@tanstack/react-table";
 import OrdersFilter from "./filter";
+import MainSelect from "@/components/BaseInputs/MainSelect";
+import { useNavigateParams } from "@/hooks/custom/useCustomNavigate";
+import cl from "classnames";
 
 const Orders = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const navigateParams = useNavigateParams();
   const lang = useAppSelector(langSelector);
   const page = Number(useQueryString("page")) || 1;
   const status = useQueryString("status");
@@ -62,12 +66,12 @@ const Orders = () => {
         cell: ({ row }) => row.original?.user?.name,
       },
       {
-        accessorKey: "category",
+        accessorKey: "group_problem",
         header: t("category"),
         cell: ({ row }) => row.original?.category?.[`name_${lang}`],
       },
       {
-        accessorKey: "created_at",
+        accessorKey: "ordered_date",
         header: t("created_at"),
         size: 10,
         cell: ({ row }) =>
@@ -88,7 +92,13 @@ const Orders = () => {
     <Card>
       <Header title={"orders"}>
         <div className="flex gap-2">
+          <MainSelect
+            values={OrderStatusName}
+            value={status}
+            onChange={(e) => navigateParams({ status: e.target.value })}
+          />
           <Button
+            className="bg-red-300"
             btnType={BtnTypes.primary}
             onClick={() => navigate("/orders")}
           >
@@ -101,12 +111,21 @@ const Orders = () => {
         <div>
           <ItemsCount data={orders} />
 
-          <VirtualTable columns={columns} data={orders?.items} exHeight={150}>
-            <OrdersFilter />
+          <VirtualTable
+            rowClassName={({ original }) =>
+              cl({
+                ["bg-red-200"]: original.status === OrderStatus.denied,
+                ["bg-blue-200"]: original.status === OrderStatus.received,
+                ["bg-green-200"]: original.status === OrderStatus.done,
+              })
+            }
+            columns={columns}
+            data={orders?.items}
+            exHeight={100}
+          >
+            {/* <OrdersFilter /> */}
           </VirtualTable>
 
-          {/* {isLoading && <Loading />} */}
-          {/* {!orders?.items?.length && !isLoading && <EmptyList />} */}
           {!!orders && <Pagination totalPages={orders.pages} />}
         </div>
       </div>

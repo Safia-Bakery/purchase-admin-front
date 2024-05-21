@@ -105,3 +105,8 @@ export function debounce<F extends (...args: any[]) => any>(
     timeout = setTimeout(later, wait);
   };
 }
+
+export const disableAction: { [key: number]: boolean } = {
+  [OrderStatus.denied]: true,
+  [OrderStatus.done]: true,
+};

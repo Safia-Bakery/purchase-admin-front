@@ -8,14 +8,9 @@ import Loading from "@/components/Loader";
 import removeItemMutation from "@/hooks/mutation/removeItem";
 import toolCountMutation from "@/hooks/mutation/toolCount";
 import { errorToast, successToast } from "@/utils/toast";
-import { ExpenditureToolType, OrderStatus } from "@/utils/types";
+import { ExpenditureToolType } from "@/utils/types";
 import useExpenditure from "@/hooks/useExpenditure";
-import { debounce } from "@/utils/helpers";
-
-const disableAction: { [key: number]: boolean } = {
-  [OrderStatus.denied]: true,
-  [OrderStatus.done]: true,
-};
+import { debounce, disableAction } from "@/utils/helpers";
 
 const ProdsTable = () => {
   const { t } = useTranslation();
@@ -24,9 +19,8 @@ const ProdsTable = () => {
     [key: string]: number;
   }>();
   const { mutate, isPending } = removeItemMutation();
-  const { mutate: updateCount, isPending: updateCountPending } =
-    toolCountMutation();
-  const { data, refetch, isFetching } = useExpenditure({ id });
+  const { mutate: updateCount } = toolCountMutation();
+  const { data, refetch } = useExpenditure({ id });
 
   const order = data?.items?.[0];
 
@@ -108,8 +102,9 @@ const ProdsTable = () => {
         header: t("group"),
       },
       {
-        accessorKey: "measurement",
+        accessorKey: "mainunit",
         header: t("measurement"),
+        cell: ({ row }) => row.original?.tool?.mainunit,
       },
       {
         accessorKey: "price_per",

@@ -66,13 +66,13 @@ const Orders = () => {
         cell: ({ row }) => row.original?.user?.name,
       },
       {
-        accessorKey: "group_problem",
-        header: t("category"),
+        accessorKey: "category",
+        header: t("group_problem"),
         cell: ({ row }) => row.original?.category?.[`name_${lang}`],
       },
       {
-        accessorKey: "ordered_date",
-        header: t("created_at"),
+        accessorKey: "created_at",
+        header: t("ordered_date"),
         size: 10,
         cell: ({ row }) =>
           dayjs(row.original?.created_at).format(dateTimeFormat),

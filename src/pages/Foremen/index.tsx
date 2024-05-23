@@ -35,7 +35,7 @@ const Foremen = () => {
       },
       {
         accessorKey: "name",
-        header: t("name"),
+        header: t("name_in_table"),
         cell: ({ row }) => row.original?.name,
       },
       {

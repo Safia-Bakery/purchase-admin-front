@@ -114,6 +114,7 @@ export interface ExpenditureToolType {
   tool: {
     id: number;
     name: string;
+    code: string;
     status: number;
     iiko_id: string;
     price: number;

@@ -98,9 +98,14 @@ const ProdsTable = () => {
         cell: ({ row }) => row.original?.tool?.name,
       },
       {
-        accessorKey: "group",
-        header: t("group"),
+        accessorKey: "code",
+        header: t("article"),
+        cell: ({ row }) => row.original?.tool?.code,
       },
+      // {
+      //   accessorKey: "group",
+      //   header: t("group"),
+      // },
       {
         accessorKey: "mainunit",
         header: t("measurement"),

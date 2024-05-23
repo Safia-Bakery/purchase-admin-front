@@ -38,14 +38,19 @@ const ForemenOrders = () => {
         ),
       },
       {
+        accessorKey: "name",
+        header: t("foreman"),
+        cell: ({ row }) => row.original?.client?.name,
+      },
+      {
         accessorKey: "branch",
         header: t("branch"),
         cell: ({ row }) => row.original?.branch?.name,
       },
-      {
-        accessorKey: "total_sum",
-        header: t("sum_order"),
-      },
+      // {
+      //   accessorKey: "total_sum",
+      //   header: t("sum_order"),
+      // },
       {
         accessorKey: "status",
         header: t("status"),

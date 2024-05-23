@@ -125,6 +125,7 @@ const localization = {
       total: "В общем",
       uploaded_images: "Картинки товара",
       ordered_date: "Дата оформления",
+      article: "Артикуль",
     },
   },
   uz: {

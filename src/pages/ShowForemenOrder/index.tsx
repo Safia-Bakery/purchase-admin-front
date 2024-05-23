@@ -8,7 +8,7 @@ import { useNavigateParams } from "custom/useCustomNavigate";
 import Loading from "@/components/Loader";
 import Suspend from "@/components/Suspend";
 import { BtnTypes, ModalTypes, OrderStatus } from "@/utils/types";
-import { dateTimeFormat, disableAction, excelBtnId } from "@/utils/helpers";
+import { dateTimeFormat, disableAction } from "@/utils/helpers";
 import Container from "@/components/Container";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
@@ -172,6 +172,11 @@ const ShowForemenOrder = () => {
                     <td>
                       {!!order?.user?.name ? order?.user?.name : t("not_given")}
                     </td>
+                  </tr>
+
+                  <tr>
+                    <th>{t("comments")}</th>
+                    <td>{order?.comment}</td>
                   </tr>
 
                   {order?.deny_reason && (

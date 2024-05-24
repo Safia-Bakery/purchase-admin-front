@@ -12,6 +12,7 @@ import Button from "@/components/Button";
 import useExpenditure from "@/hooks/useExpenditure";
 import { ColumnDef } from "@tanstack/react-table";
 import VirtualTable from "@/components/VirtualTable";
+import cl from "classnames";
 
 const ForemenOrders = () => {
   const { t } = useTranslation();
@@ -75,7 +76,18 @@ const ForemenOrders = () => {
       <div className="p-4">
         <div className="table-responsive grid-view">
           <ItemsCount data={orders} />
-          <VirtualTable columns={columns} data={orders?.items} exHeight={100} />
+          <VirtualTable
+            columns={columns}
+            data={orders?.items}
+            exHeight={100}
+            rowClassName={({ original }) =>
+              cl({
+                ["bg-red-200"]: original.status === OrderStatus.denied,
+                ["bg-blue-200"]: original.status === OrderStatus.received,
+                ["bg-green-200"]: original.status === OrderStatus.done,
+              })
+            }
+          />
           {isFetching && <Loading />}
 
           {!!orders && <Pagination totalPages={orders.pages} />}

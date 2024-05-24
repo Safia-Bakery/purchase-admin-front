@@ -16,7 +16,8 @@ const ShowOrder = lazy(() => import("@/pages/ShowOrder"));
 const ForemenOrders = lazy(() => import("@/pages/ForemenOrders"));
 const ShowForemenOrder = lazy(() => import("@/pages/ShowForemenOrder"));
 
-const BuildingMaterials = lazy(() => import("@/pages/BuildingMaterials"));
+const Tools = lazy(() => import("@/pages/Tools"));
+const UpdateTools = lazy(() => import("@/pages/UpdateTools"));
 
 const Foremen = lazy(() => import("@/pages/Foremen"));
 const EditAddForemen = lazy(() => import("@/pages/EditAddForemen"));
@@ -147,7 +148,16 @@ const App = () => {
           path={"building-materials"}
           element={
             <Suspend>
-              <BuildingMaterials />
+              <Tools />
+            </Suspend>
+          }
+        />
+
+        <Route
+          path={"building-materials/:id"}
+          element={
+            <Suspend>
+              <UpdateTools />
             </Suspend>
           }
         />

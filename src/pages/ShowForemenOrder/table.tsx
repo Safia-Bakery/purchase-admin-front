@@ -11,6 +11,7 @@ import { errorToast, successToast } from "@/utils/toast";
 import { ExpenditureToolType } from "@/utils/types";
 import useExpenditure from "@/hooks/useExpenditure";
 import { debounce, disableAction } from "@/utils/helpers";
+import toolUpdateMutation from "@/hooks/mutation/toolUpdate";
 
 const ProdsTable = () => {
   const { t } = useTranslation();
@@ -19,6 +20,8 @@ const ProdsTable = () => {
     [key: string]: number;
   }>();
   const { mutate, isPending } = removeItemMutation();
+
+  const { mutate: toolUpdate } = toolUpdateMutation();
   const { mutate: updateCount } = toolCountMutation();
   const { data, refetch } = useExpenditure({ id });
 
@@ -76,9 +79,25 @@ const ProdsTable = () => {
     [getValues, setValue, debouncedUpdateCount]
   );
 
+  const handlePrice = (id: number) => {
+    toolUpdate(
+      {
+        id,
+        price: +getValues(`${id}_price`),
+      },
+      {
+        onSuccess: () => {
+          refetch();
+          successToast("Успешно Изменен");
+        },
+      }
+    );
+  };
+
   useEffect(() => {
     const init = order?.expendituretool.reduce((acc: any, item) => {
       acc[item?.id!] = item?.amount ?? 0;
+      acc[`${item.tool_id}_price`] = item.tool?.price ?? 0;
       return acc;
     }, {});
     reset(init);
@@ -114,7 +133,18 @@ const ProdsTable = () => {
       {
         accessorKey: "price_per",
         header: t("price_per"),
-        cell: ({ row }) => row.original?.tool?.price,
+        // cell: ({ row }) => row.original?.tool?.price,
+        cell: ({ row }) => (
+          <input
+            className="max-w-80 w-full bg-transparent"
+            type="number"
+            disabled={disableAction[order?.status!]}
+            onKeyDown={(e) =>
+              e.key === "Enter" && handlePrice(row.original.tool_id)
+            }
+            {...register(`${row.original.tool_id}_price`)}
+          />
+        ),
       },
       {
         accessorKey: "amount",
@@ -135,6 +165,7 @@ const ProdsTable = () => {
               <input
                 className="w-16 bg-transparent text-center"
                 disabled
+                type="number"
                 {...register(`${row.original.id}`)}
               />
             </span>
@@ -155,7 +186,8 @@ const ProdsTable = () => {
         accessorKey: "sum",
         header: t("sum"),
         cell: ({ row }) =>
-          Number(getValues(`${row.original?.id}`)) * row.original?.tool?.price,
+          Number(getValues(`${row.original?.id}`)) *
+          Number(getValues(`${row.original?.tool_id}_price`)),
       },
       {
         accessorKey: "action",

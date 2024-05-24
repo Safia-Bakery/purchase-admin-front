@@ -176,7 +176,9 @@ const ShowForemenOrder = () => {
 
                   <tr>
                     <th>{t("comments")}</th>
-                    <td>{order?.comment}</td>
+                    <td>
+                      {!!order?.comment ? order?.comment : t("not_given")}
+                    </td>
                   </tr>
 
                   {order?.deny_reason && (

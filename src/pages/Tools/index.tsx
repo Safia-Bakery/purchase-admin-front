@@ -11,13 +11,16 @@ import { ColumnDef } from "@tanstack/react-table";
 import VirtualTable from "@/components/VirtualTable";
 import useTools from "@/hooks/useTools";
 import { useNavigateParams } from "@/hooks/custom/useCustomNavigate";
+import TableViewBtn from "@/components/TableViewBtn";
 
-const BuildingMaterials = () => {
+const Tools = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const navigateParams = useNavigateParams();
   const parent_id = useQueryString("parent_id");
+
   const parent_name = useQueryString("parent_name");
+  const handleNavigate = (route: string) => navigate(route);
   const {
     data: tools,
     isLoading,
@@ -51,6 +54,18 @@ const BuildingMaterials = () => {
         header: t("status"),
         cell: ({ row }) =>
           !!row.original?.status ? t("active") : t("inactive"),
+      },
+      {
+        accessorKey: "action",
+        header: "",
+        size: 5,
+        cell: ({ row }) => (
+          <TableViewBtn
+            onClick={() =>
+              handleNavigate(`${row.original.id}${window.location.search}`)
+            }
+          />
+        ),
       },
     ],
     []
@@ -93,4 +108,4 @@ const BuildingMaterials = () => {
   );
 };
 
-export default BuildingMaterials;
+export default Tools;

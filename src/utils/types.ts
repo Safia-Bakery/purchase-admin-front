@@ -132,6 +132,17 @@ export interface ToolsSearchType {
   price: number;
 }
 
+export interface ToolType {
+  id: number;
+  name: string;
+  status: number;
+  iiko_id: string;
+  price: number;
+  num: string;
+  mainunit: string;
+  code: string;
+}
+
 export interface ToolsSearchTypes extends BasePaginate {
   items: ToolsSearchType[];
 }

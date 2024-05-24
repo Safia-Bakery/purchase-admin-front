@@ -119,6 +119,7 @@ export interface ExpenditureToolType {
     iiko_id: string;
     price: number;
     mainunit?: string;
+    num: string;
   };
   amount: number;
 }

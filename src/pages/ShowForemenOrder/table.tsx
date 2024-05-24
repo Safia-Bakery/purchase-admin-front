@@ -98,9 +98,9 @@ const ProdsTable = () => {
         cell: ({ row }) => row.original?.tool?.name,
       },
       {
-        accessorKey: "code",
+        accessorKey: "num",
         header: t("article"),
-        cell: ({ row }) => row.original?.tool?.code,
+        cell: ({ row }) => row.original?.tool?.num,
       },
       // {
       //   accessorKey: "group",

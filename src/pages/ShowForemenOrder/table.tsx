@@ -15,20 +15,18 @@ import toolUpdateMutation from "@/hooks/mutation/toolUpdate";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
 import { useNavigateParams } from "@/hooks/custom/useCustomNavigate";
-import useQueryString from "@/hooks/custom/useQueryString";
 import cl from "classnames";
 
 const ProdsTable = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
-  const modal = Number(useQueryString("modal"));
   const navigateParams = useNavigateParams();
   const { getValues, reset, setValue, register, watch } = useForm<{
     [key: string]: number;
   }>();
   const { mutate, isPending } = removeItemMutation();
 
-  const { mutate: toolUpdate } = toolUpdateMutation();
+  const { mutate: toolUpdate, isPending: toolPending } = toolUpdateMutation();
   const { mutate: updateCount } = toolCountMutation();
   const { data, refetch } = useExpenditure({ id });
 
@@ -230,7 +228,7 @@ const ProdsTable = () => {
     ]
   );
 
-  if (isPending) return <Loading />;
+  if (isPending || toolPending) return <Loading />;
 
   return (
     <>

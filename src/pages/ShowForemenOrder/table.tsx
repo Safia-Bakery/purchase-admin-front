@@ -8,15 +8,22 @@ import Loading from "@/components/Loader";
 import removeItemMutation from "@/hooks/mutation/removeItem";
 import toolCountMutation from "@/hooks/mutation/toolCount";
 import { errorToast, successToast } from "@/utils/toast";
-import { ExpenditureToolType } from "@/utils/types";
+import { BtnTypes, ExpenditureToolType, ModalTypes } from "@/utils/types";
 import useExpenditure from "@/hooks/useExpenditure";
 import { debounce, disableAction } from "@/utils/helpers";
 import toolUpdateMutation from "@/hooks/mutation/toolUpdate";
+import Header from "@/components/Header";
+import Button from "@/components/Button";
+import { useNavigateParams } from "@/hooks/custom/useCustomNavigate";
+import useQueryString from "@/hooks/custom/useQueryString";
+import cl from "classnames";
 
 const ProdsTable = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
-  const { getValues, reset, setValue, register } = useForm<{
+  const modal = Number(useQueryString("modal"));
+  const navigateParams = useNavigateParams();
+  const { getValues, reset, setValue, register, watch } = useForm<{
     [key: string]: number;
   }>();
   const { mutate, isPending } = removeItemMutation();
@@ -79,29 +86,43 @@ const ProdsTable = () => {
     [getValues, setValue, debouncedUpdateCount]
   );
 
-  const handlePrice = (id: number) => {
+  const handlePrice = () => {
+    const vals = order?.expendituretool.reduce((acc: any, item) => {
+      acc[`${item.tool_id}`] = getValues(`${item.tool_id}_price`);
+      return acc;
+    }, {});
     toolUpdate(
       {
-        id,
-        price: +getValues(`${id}_price`),
+        ...vals,
       },
       {
         onSuccess: () => {
           refetch();
           successToast("Успешно Изменен");
         },
+        onError: (e) => {
+          refetch();
+          errorToast(e.message);
+        },
       }
     );
   };
 
-  useEffect(() => {
-    const init = order?.expendituretool.reduce((acc: any, item) => {
+  const init = useMemo(() => {
+    return order?.expendituretool.reduce((acc: any, item) => {
       acc[item?.id!] = item?.amount ?? 0;
-      acc[`${item.tool_id}_price`] = item.tool?.price ?? 0;
+      acc[`${item.tool_id}_price`] = +item.tool?.price || 0;
       return acc;
     }, {});
+  }, [order]);
+
+  const checker = useMemo(() => {
+    return JSON.stringify(init) === JSON.stringify(watch());
+  }, [init, watch()]);
+
+  useEffect(() => {
     reset(init);
-  }, [order, reset]);
+  }, [init]);
 
   const columns = useMemo<ColumnDef<ExpenditureToolType>[]>(
     () => [
@@ -139,9 +160,6 @@ const ProdsTable = () => {
             className="max-w-80 w-full bg-transparent"
             type="number"
             disabled={disableAction[order?.status!]}
-            onKeyDown={(e) =>
-              e.key === "Enter" && handlePrice(row.original.tool_id)
-            }
             {...register(`${row.original.tool_id}_price`)}
           />
         ),
@@ -216,6 +234,28 @@ const ProdsTable = () => {
 
   return (
     <>
+      <Header title={"products"}>
+        <div className="flex gap-2">
+          <Button
+            className={cl(
+              { ["opacity-100"]: !checker },
+              "transition-opacity opacity-0"
+            )}
+            btnType={BtnTypes.primary}
+            onClick={handlePrice}
+          >
+            {t("save")}
+          </Button>
+          {!disableAction[order?.status!] && (
+            <Button
+              btnType={BtnTypes.success}
+              onClick={() => navigateParams({ modal: ModalTypes.add_prods })}
+            >
+              {t("add_products")}
+            </Button>
+          )}
+        </div>
+      </Header>
       <VirtualTable
         columns={columns}
         data={order?.expendituretool}

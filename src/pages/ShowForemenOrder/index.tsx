@@ -193,7 +193,7 @@ const ShowForemenOrder = () => {
           </div>
           <hr />
 
-          <Header title={"products"}>
+          {/* <Header title={"products"}>
             {!disableAction[order?.status!] && (
               <Button
                 btnType={BtnTypes.success}
@@ -202,7 +202,7 @@ const ShowForemenOrder = () => {
                 {t("add_products")}
               </Button>
             )}
-          </Header>
+          </Header> */}
           <ProdsTable />
 
           {renderBtns}

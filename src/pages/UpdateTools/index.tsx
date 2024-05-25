@@ -44,12 +44,14 @@ const UpdateTools = () => {
     const { name, status, price, mainunit, code } = getValues();
     mutate(
       {
-        status: +!!status,
-        id: Number(id),
-        name,
-        price: +price,
-        mainunit,
-        code,
+        [id!]: +price,
+
+        // status: +!!status,
+        // id: Number(id),
+        // name,
+        // price: +price,
+        // mainunit,
+        // code,
       },
       {
         onSuccess: () => {
@@ -66,11 +68,11 @@ const UpdateTools = () => {
   useEffect(() => {
     if (tool) {
       reset({
-        status: !!tool.status,
+        // status: !!tool.status,
         price: tool.price,
-        mainunit: tool.mainunit,
-        code: tool.code,
-        name: tool.name,
+        // mainunit: tool.mainunit,
+        // code: tool.code,
+        // name: tool.name,
       });
     }
   }, [tool, reset]);
@@ -85,22 +87,22 @@ const UpdateTools = () => {
         </Button>
       </Header>
       <form className="p-3" onSubmit={handleSubmit(onSubmit)}>
-        <BaseInput label="name_in_table" error={errors.name_in_table}>
+        {/* <BaseInput label="name_in_table" error={errors.name_in_table}>
           <MainInput
             register={register("name", { required: t("required_field") })}
           />
-        </BaseInput>
+        </BaseInput> */}
         <BaseInput label="price">
           <MainInput type="number" register={register("price")} />
         </BaseInput>
-        <BaseInput label="measurement">
+        {/* <BaseInput label="measurement">
           <MainInput register={register("mainunit")} />
         </BaseInput>
         <BaseInput label="code">
           <MainInput register={register("code")} />
         </BaseInput>
 
-        <MainCheckBox label={"active"} register={register("status")} />
+        <MainCheckBox label={"active"} register={register("status")} /> */}
 
         <Button green type="submit" className="mt-4 float-end">
           {t("save")}

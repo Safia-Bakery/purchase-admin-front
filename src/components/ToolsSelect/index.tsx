@@ -21,10 +21,12 @@ const ToolsSelect: FC<Props> = ({
   autoFocus = false,
   onChange,
 }) => {
+  const [page, $page] = useState(1);
   const [query, $query] = useDebounce("");
 
   const { data, isFetching, isLoading } = useToolsSearch({
     enabled,
+    page,
     ...(!!query && { name: query }),
   });
 
@@ -57,15 +59,21 @@ const ToolsSelect: FC<Props> = ({
       );
   }, [data?.items, query]);
 
+  // if (!data) return;
+
   return (
     <Select
       options={items}
       isLoading={isFetching || isLoading}
       isMulti
+      onMenuScrollToBottom={() =>
+        $page((prev) => (data?.pages! > page ? prev + 1 : prev))
+      }
       onChange={handleChange}
       className="z-50 branch-select"
       onInputChange={(e) => $query(e)}
       isClearable
+      loadingMessage={() => "loading"}
       backspaceRemovesValue={false}
       autoFocus={autoFocus}
       placeholder={placeholder}

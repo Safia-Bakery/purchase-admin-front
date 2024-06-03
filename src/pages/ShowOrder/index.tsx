@@ -224,33 +224,37 @@ const ShowRequestApc = () => {
                   <tr>
                     <th>{t("certificates")}</th>
                     <td>
-                      {!!order?.sertificates?.length
-                        ? order?.sertificates.map((file) => (
-                            <button
-                              key={file.id}
-                              className="text-blue-500"
-                              onClick={handleShowPhoto(file.url)}
-                            >
-                              {t("file")}
-                            </button>
-                          ))
-                        : t("not_given")}
+                      <div className="flex flex-col w-12">
+                        {!!order?.sertificates?.length
+                          ? order?.sertificates.map((file) => (
+                              <button
+                                key={file.id}
+                                className="text-blue-500"
+                                onClick={handleShowPhoto(file.url)}
+                              >
+                                {t("file")}
+                              </button>
+                            ))
+                          : t("not_given")}
+                      </div>
                     </td>
                   </tr>
                   <tr>
                     <th>{t("commertial_reqs")}</th>
                     <td>
-                      {order?.brochures
-                        ? order?.brochures.map((file) => (
-                            <button
-                              key={file.id}
-                              className="text-blue-500"
-                              onClick={handleShowPhoto(file.url)}
-                            >
-                              {t("file")}
-                            </button>
-                          ))
-                        : t("not_given")}
+                      <div className="flex flex-col w-12">
+                        {order?.brochures
+                          ? order?.brochures.map((file) => (
+                              <button
+                                key={file.id}
+                                className="text-blue-500"
+                                onClick={handleShowPhoto(file.url)}
+                              >
+                                {t("file")}
+                              </button>
+                            ))
+                          : t("not_given")}
+                      </div>
                     </td>
                   </tr>
 

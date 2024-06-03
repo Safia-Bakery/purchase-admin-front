@@ -3,7 +3,11 @@ import MainInput from "@/components/BaseInputs/MainInput";
 import Button from "@/components/Button";
 import Loading from "@/components/Loader";
 import loginMutation from "@/hooks/mutation/login";
-import { loginHandler, tokenSelector } from "@/store/reducers/auth";
+import {
+  lastUrlSelector,
+  loginHandler,
+  tokenSelector,
+} from "@/store/reducers/auth";
 import { useAppDispatch, useAppSelector } from "@/store/rootConfig";
 import { successToast } from "@/utils/toast";
 import { useEffect, useState } from "react";
@@ -17,6 +21,7 @@ const Login = () => {
   const navigate = useNavigate();
   const token = useAppSelector(tokenSelector);
   const [error, $error] = useState(false);
+  const lastUrl = useAppSelector(lastUrlSelector);
 
   const {
     register,
@@ -44,10 +49,9 @@ const Login = () => {
   };
 
   useEffect(() => {
-    if (token) navigate("/");
+    if (token) navigate(lastUrl);
   }, [token]);
 
-  //   if (isPending) return <Loading absolute />;
   return (
     <div className="h-screen flex flex-1 w-screen">
       <div className="flex flex-[4] items-center justify-center bg-lightBrown">

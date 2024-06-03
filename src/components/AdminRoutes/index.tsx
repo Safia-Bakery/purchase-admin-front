@@ -20,10 +20,6 @@ const AdminRoutes = () => {
     if (!!error) dispatch(logoutHandler());
   }, [token, error]);
 
-  // useEffect(() => {
-  //   navigate("/orders");
-  // }, []);
-
   if (isLoading) return <Loading />;
 
   return (

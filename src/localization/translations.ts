@@ -126,6 +126,7 @@ const localization = {
       uploaded_images: "Картинки товара",
       ordered_date: "Дата оформления",
       article: "Артикуль",
+      download_excel: "Загрузить в Excel",
     },
   },
   uz: {

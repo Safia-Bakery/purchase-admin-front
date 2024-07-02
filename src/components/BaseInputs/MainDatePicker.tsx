@@ -34,7 +34,7 @@ const MainDatePicker: FC<Props> = ({
   placeholderText,
   dateFormat, //"Pp"
 }) => {
-  const handleClear = () => onChange?.(null);
+  const handleClear = () => onChange?.(undefined);
 
   return (
     <div className={cl(wrapperClassName, "relative min-w-40")}>

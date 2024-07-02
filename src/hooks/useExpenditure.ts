@@ -4,15 +4,18 @@ import { useAppSelector } from "@/store/rootConfig";
 import { ExpendituresType } from "@/utils/types";
 import baseApi from "@/api/baseApi";
 
-interface Body {
+interface Params {
   id?: string;
   size?: number;
   page?: number;
   name?: string;
+  client_id?: string;
+  branch_id?: string;
+  status?: string;
   enabled?: boolean;
 }
 
-export const useExpenditure = ({ enabled, ...params }: Body) => {
+export const useExpenditure = ({ enabled, ...params }: Params) => {
   const token = useAppSelector(tokenSelector);
   return useQuery({
     queryKey: ["expenditure", params],

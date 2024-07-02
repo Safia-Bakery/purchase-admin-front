@@ -4,6 +4,7 @@ import { useState } from "react";
 import useDebounce from "custom/useDebounce";
 import { useNavigateParams } from "custom/useCustomNavigate";
 import useBranches from "@/hooks/useBranches";
+import useUpdateQueryStr from "@/hooks/custom/useUpdateQueryStr";
 
 interface Props {
   origin?: number;
@@ -25,6 +26,8 @@ const BranchSelect: FC<Props> = ({
 }) => {
   const navigate = useNavigateParams();
   const [query, $query] = useDebounce("");
+  const branchJson = useUpdateQueryStr("branch");
+  const branch = branchJson && JSON.parse(branchJson);
 
   const { data, isFetching, isLoading } = useBranches({
     enabled,
@@ -62,6 +65,7 @@ const BranchSelect: FC<Props> = ({
   return (
     <Select
       options={items}
+      value={{ value: branch?.id, label: branch?.name }}
       isLoading={isFetching || isLoading}
       onChange={handleChange}
       className="z-50 branch-select"

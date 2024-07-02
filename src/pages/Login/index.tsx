@@ -47,7 +47,6 @@ const Login = () => {
       }
     );
   };
-
   useEffect(() => {
     if (token) navigate(lastUrl);
   }, [token]);

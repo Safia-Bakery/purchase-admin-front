@@ -83,11 +83,11 @@ function VirtualTable<T>({
   return (
     <div
       ref={parentRef}
-      className={`${className} w-full bg-white overflow-auto`}
+      className={`${className} w-full bg-white overflow min-h-72`}
     >
       <div
         style={{ height: `${virtualizer.getTotalSize() + exHeight}px` }}
-        className="overflow-x-auto"
+        className="overflow-x-auto min-h-72"
       >
         <table className="table table-bordered w-full" ref={tableRef}>
           <thead>
@@ -159,8 +159,6 @@ function VirtualTable<T>({
             })}
           </tbody>
         </table>
-
-        {!data?.length && <EmptyList />}
       </div>
       <button id={"table_id"} className="hidden" onClick={downloadAsPdf}>
         download

@@ -18,7 +18,7 @@ export const authReducer = createSlice({
     logoutHandler: (state) => {
       state.token = null;
       const { pathname, search } = window.location;
-      state.lastUrl = pathname + search;
+      state.lastUrl = (pathname === "/login" ? "/" : pathname) + search;
     },
     loginHandler: (state, { payload }) => {
       state.token = payload;

@@ -13,6 +13,8 @@ import useExpenditure from "@/hooks/useExpenditure";
 import { ColumnDef } from "@tanstack/react-table";
 import VirtualTable from "@/components/VirtualTable";
 import cl from "classnames";
+import dayjs from "dayjs";
+import { dateTimeFormat } from "@/utils/helpers";
 
 const ForemenOrders = () => {
   const { t } = useTranslation();
@@ -48,10 +50,12 @@ const ForemenOrders = () => {
         header: t("branch"),
         cell: ({ row }) => row.original?.branch?.name,
       },
-      // {
-      //   accessorKey: "total_sum",
-      //   header: t("sum_order"),
-      // },
+      {
+        accessorKey: "created_at",
+        header: t("order_created_date"),
+        cell: ({ row }) =>
+          dayjs(row.original?.created_at).format(dateTimeFormat),
+      },
       {
         accessorKey: "status",
         header: t("status"),

@@ -2,7 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import Card from "@/components/Card";
 import Pagination from "@/components/Pagination";
-import { OrderStatusName, dateTimeFormat, handleIdx } from "@/utils/helpers";
+import {
+  OrderStatusName,
+  dateTimeFormat,
+  handleIdx,
+  yearMonthDate,
+} from "@/utils/helpers";
 import ItemsCount from "@/components/ItemsCount";
 import useQueryString from "custom/useQueryString";
 
@@ -19,14 +24,14 @@ import VirtualTable from "@/components/VirtualTable";
 import { ColumnDef } from "@tanstack/react-table";
 import MainSelect from "@/components/BaseInputs/MainSelect";
 import cl from "classnames";
-import MainInput from "@/components/BaseInputs/MainInput";
 import useOrdersExcel from "@/hooks/useOrdersExcel";
 import useBackExcel from "@/hooks/custom/useBackExcel";
 import { useForm } from "react-hook-form";
+import MainDatePicker from "@/components/BaseInputs/MainDatePicker";
 
 type Filter = {
-  from?: string;
-  to?: string;
+  from?: Date;
+  to?: Date;
   status?: string;
 };
 
@@ -37,14 +42,22 @@ const Orders = () => {
   const [filter, $filter] = useState<Filter>();
   const { data: orders, isLoading } = useOrders({
     page,
+    ...(!!filter?.status && { status: filter?.status }),
+    ...(!!filter?.to && { to_date: dayjs(filter?.to).format(yearMonthDate) }),
+    ...(!!filter?.from && {
+      from_date: dayjs(filter?.from).format(yearMonthDate),
+    }),
   });
 
-  const { register, getValues, handleSubmit } = useForm();
+  const handleChange = (key: Filter) =>
+    $filter((prev) => ({ ...prev, ...key }));
 
   const { data: orderExcel, refetch: excelRefetch } = useOrdersExcel({
     enabled: false,
-    ...(!!filter?.from && { from: filter?.from }),
-    ...(!!filter?.to && { to: filter?.to }),
+    ...(!!filter?.to && { to_date: dayjs(filter?.to).format(yearMonthDate) }),
+    ...(!!filter?.from && {
+      from_date: dayjs(filter?.from).format(yearMonthDate),
+    }),
     ...(!!filter?.status && { status: filter?.status }),
   });
   const columns = useMemo<ColumnDef<OrderType>[]>(
@@ -91,17 +104,7 @@ const Orders = () => {
     [lang]
   );
 
-  const onSubmit = () => {
-    const { from, to, status } = getValues();
-    $filter({
-      ...(!!from && { from }),
-      ...(!!to && { to }),
-      ...(!!status && { status }),
-    });
-    setTimeout(() => {
-      excelRefetch();
-    }, 100);
-  };
+  const onSubmit = () => excelRefetch();
 
   useEffect(() => {
     if (orderExcel?.file) useBackExcel(orderExcel.file);
@@ -112,18 +115,32 @@ const Orders = () => {
   return (
     <Card>
       <Header title={"orders"}>
-        <form className="flex gap-2" onSubmit={handleSubmit(onSubmit)}>
-          <MainInput type="date" register={register("from")} />
-          <MainInput type="date" register={register("to")} />
-          <MainSelect values={OrderStatusName} register={register("status")} />
+        <div className="flex gap-2">
+          <MainDatePicker
+            selected={filter?.from}
+            placeholderText={t("from_date")}
+            dateFormat="dd-MM-YYYY"
+            onChange={(e: Date) => handleChange({ from: e })}
+          />
+          <MainDatePicker
+            placeholderText={t("to_date")}
+            dateFormat="dd-MM-YYYY"
+            onChange={(e: Date) => handleChange({ to: e })}
+            selected={filter?.to}
+          />
+          <MainSelect
+            values={OrderStatusName}
+            onChange={(e) => handleChange({ status: e.target.value })}
+            value={filter?.status}
+          />
           <Button
-            type="submit"
+            onClick={onSubmit}
             className="bg-red-300 !min-w-max"
             btnType={BtnTypes.primary}
           >
             {t("download_excel")}
           </Button>
-        </form>
+        </div>
       </Header>
 
       <div className="p-4">

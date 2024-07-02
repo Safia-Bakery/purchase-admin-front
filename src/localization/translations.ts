@@ -127,6 +127,8 @@ const localization = {
       ordered_date: "Дата оформления",
       article: "Артикуль",
       download_excel: "Загрузить в Excel",
+      from_date: "Начало",
+      to_date: "Конец",
     },
   },
   uz: {

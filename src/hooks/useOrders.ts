@@ -9,6 +9,8 @@ interface Body {
   category_id?: string;
   created_at?: string;
   status?: number | string;
+  from_date?: string;
+  to_date?: string;
   page?: number;
   id?: number;
   enabled?: boolean;

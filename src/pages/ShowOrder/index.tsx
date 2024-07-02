@@ -205,7 +205,7 @@ const ShowRequestApc = () => {
                   <tr>
                     <th>{t("uploaded_images")}</th>
                     <td>
-                      <div className="flex flex-col w-12">
+                      <div className="flex flex-col w-max">
                         {!!order?.product_images?.length
                           ? order?.product_images.map((file) => (
                               <button
@@ -224,7 +224,7 @@ const ShowRequestApc = () => {
                   <tr>
                     <th>{t("certificates")}</th>
                     <td>
-                      <div className="flex flex-col w-12">
+                      <div className="flex flex-col w-max">
                         {!!order?.sertificates?.length
                           ? order?.sertificates.map((file) => (
                               <button
@@ -242,7 +242,7 @@ const ShowRequestApc = () => {
                   <tr>
                     <th>{t("commertial_reqs")}</th>
                     <td>
-                      <div className="flex flex-col w-12">
+                      <div className="flex flex-col w-max">
                         {order?.brochures
                           ? order?.brochures.map((file) => (
                               <button

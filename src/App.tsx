@@ -5,6 +5,7 @@ import { langSelector } from "@/store/reducers/selects";
 import { Route, Routes } from "react-router-dom";
 import Suspend from "./components/Suspend";
 import "dayjs/locale/ru";
+import "react-datepicker/dist/react-datepicker.css";
 
 const Login = lazy(() => import("@/pages/Login"));
 const AdminRoutes = lazy(() => import("@/components/AdminRoutes"));

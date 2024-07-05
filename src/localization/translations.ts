@@ -141,8 +141,9 @@ const localization = {
       select_handler: "Выберите исполнителя",
       phone: "Телефон",
       company_name: "Название компании",
-      responsible: "Ответственный",
+      responsible: "Ответственный закупщик",
       assign: "Назначить",
+      purchaser: "Закупщик",
     },
   },
   uz: {

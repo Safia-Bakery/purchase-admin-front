@@ -95,6 +95,11 @@ const Orders = () => {
           dayjs(row.original?.created_at).format(dateTimeFormat),
       },
       {
+        accessorKey: "purchaser?.[0]?.user?.name",
+        header: t("purchaser"),
+        cell: ({ row }) => row.original?.purchaser?.[0]?.user?.name,
+      },
+      {
         accessorKey: "status",
         header: t("status"),
         cell: ({ row }) => t(OrderStatus[row.original.status]),

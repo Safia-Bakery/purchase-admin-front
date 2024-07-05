@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import Modal from "@/components/Modal";
-import { FileType, ModalTypes, OrderStatus } from "@/utils/types";
+import { BtnTypes, FileType, ModalTypes, OrderStatus } from "@/utils/types";
 import BaseInput from "@/components/BaseInputs";
 import MainTextArea from "@/components/BaseInputs/MainTextArea";
 import { CancelReason, detectFileType } from "@/utils/helpers";
@@ -16,14 +16,18 @@ import orderMutation from "@/hooks/mutation/orders";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
 import useOrder from "@/hooks/useOrder";
+import usePurchasers from "@/hooks/usePurchasers";
 
 const Modals = () => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const modal = useQueryString("modal");
+  const modal = Number(useQueryString("modal"));
   const photo = useQueryString("photo");
   const removeParams = useRemoveParams();
   const { register, getValues, watch, handleSubmit } = useForm();
+  const { data: purchasers } = usePurchasers({
+    enabled: modal === ModalTypes.assign,
+  });
 
   const { mutate: attach } = orderMutation();
 
@@ -32,6 +36,23 @@ const Modals = () => {
   const { refetch: orderRefetch, isFetching: orderFetching } = useOrder({
     id: Number(id),
   });
+
+  const handlePurchaser = (purchaser_id: number) => {
+    attach(
+      {
+        id: id!,
+        purchaser_id,
+      },
+      {
+        onSuccess: () => {
+          orderRefetch();
+          successToast("assigned");
+        },
+        onError: (e) => errorToast(e.message),
+      }
+    );
+    closeModal();
+  };
 
   const handleRequest =
     ({ status }: { status: OrderStatus }) =>
@@ -126,6 +147,35 @@ const Modals = () => {
                 />
               )}
             </Link>
+          </div>
+        );
+
+      case ModalTypes.assign:
+        return (
+          <div className={"w-[420px]"}>
+            <Header title="select_handler">
+              <button onClick={closeModal} className="close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </Header>
+            <div className={"overflow-y-auto max-h-80 h-full mt-2"}>
+              {purchasers?.items.map((item, idx) => (
+                <div
+                  key={idx}
+                  className={
+                    "flex justify-between border-b border-b-black py-4 pr-1 pl-4 items-center"
+                  }
+                >
+                  <h6 className="text-lg mb-0">{item?.name}</h6>
+                  <Button
+                    btnType={BtnTypes.success}
+                    onClick={() => handlePurchaser(item.id)}
+                  >
+                    {t("assign")}
+                  </Button>
+                </div>
+              ))}
+            </div>
           </div>
         );
 

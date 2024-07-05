@@ -110,3 +110,12 @@ export const disableAction: { [key: number]: boolean } = {
   [OrderStatus.denied]: true,
   [OrderStatus.done]: true,
 };
+
+export const fixedString = (value: string) => {
+  return value
+    .split("")
+    .filter((item) => {
+      return [" ", "-", "(", ")", "_"].indexOf(item) === -1;
+    })
+    .join("");
+};

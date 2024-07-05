@@ -6,6 +6,8 @@ import { Route, Routes } from "react-router-dom";
 import Suspend from "./components/Suspend";
 import "dayjs/locale/ru";
 import "react-datepicker/dist/react-datepicker.css";
+import routes from "./utils/routes";
+import useToken from "./hooks/useToken";
 
 const Login = lazy(() => import("@/pages/Login"));
 const AdminRoutes = lazy(() => import("@/components/AdminRoutes"));
@@ -23,6 +25,12 @@ const UpdateTools = lazy(() => import("@/pages/UpdateTools"));
 const Foremen = lazy(() => import("@/pages/Foremen"));
 const EditAddForemen = lazy(() => import("@/pages/EditAddForemen"));
 
+const Roles = lazy(() => import("@/pages/Roles"));
+const EditAddRole = lazy(() => import("@/pages/EditAddRole"));
+
+const Users = lazy(() => import("@/pages/Users"));
+const EditAddUser = lazy(() => import("@/pages/EditAddUser"));
+
 const TgRoutes = lazy(() => import("@/components/TgRoutes"));
 const SelectBranch = lazy(() => import("@/tg-routes/SelectBranch"));
 const SelectProduct = lazy(() => import("@/tg-routes/SelectProduct"));
@@ -30,6 +38,7 @@ const Success = lazy(() => import("@/tg-routes/Success"));
 
 const App = () => {
   const lang = useAppSelector(langSelector);
+  const { data: me, isLoading } = useToken({});
 
   useEffect(() => {
     i18n.changeLanguage(lang);
@@ -87,15 +96,17 @@ const App = () => {
         }
         path={"/"}
       >
-        <Route
-          path={"orders"}
-          index
-          element={
-            <Suspend>
-              <Orders />
-            </Suspend>
-          }
-        />
+        {routes.map(
+          (route) =>
+            me?.permissions?.[route.permission] && (
+              <Route
+                key={route.url}
+                path={route.url}
+                element={<Suspend>{route.element}</Suspend>}
+              />
+            )
+        )}
+        {/*        
         <Route
           path={"orders/:id"}
           element={
@@ -187,6 +198,56 @@ const App = () => {
             </Suspend>
           }
         />
+
+        <Route
+          path={"roles"}
+          element={
+            <Suspend>
+              <Roles />
+            </Suspend>
+          }
+        />
+        <Route
+          path={"roles/add"}
+          element={
+            <Suspend>
+              <EditAddRole />
+            </Suspend>
+          }
+        />
+        <Route
+          path={"roles/:id"}
+          element={
+            <Suspend>
+              <EditAddRole />
+            </Suspend>
+          }
+        />
+
+        <Route
+          path={"users"}
+          element={
+            <Suspend>
+              <Users />
+            </Suspend>
+          }
+        />
+        <Route
+          path={"users/add"}
+          element={
+            <Suspend>
+              <EditAddUser />
+            </Suspend>
+          }
+        />
+        <Route
+          path={"users/:id"}
+          element={
+            <Suspend>
+              <EditAddUser />
+            </Suspend>
+          }
+        /> */}
       </Route>
     </Routes>
   );

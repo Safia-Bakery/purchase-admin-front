@@ -5,7 +5,7 @@ import MainSelect from "@/components/BaseInputs/MainSelect";
 
 import useCategories from "@/hooks/useCategories";
 import useQueryString from "custom/useQueryString";
-import { OrderStatusName, StatusName } from "@/utils/helpers";
+import { OrderStatusName } from "@/utils/helpers";
 import { useNavigateParams } from "@/hooks/custom/useCustomNavigate";
 import { useForm } from "react-hook-form";
 import useClients from "@/hooks/useClients";

@@ -19,6 +19,7 @@ export type UserType = {
   status: number;
   created_at: string;
   updated_at: string;
+  permissions?: { [key: number]: boolean };
 };
 
 export interface CategoriesType extends BasePaginate {
@@ -65,12 +66,18 @@ export interface OrderType {
   brochures: FileTypes[];
   deny_reason?: string;
   sertificates: FileTypes[];
+
+  purchaser: {
+    user_id: number;
+    user: UserType;
+  }[];
 }
 
 export enum ModalTypes {
   image,
   deny_reason,
   add_prods,
+  assign,
 }
 export enum FileType {
   other,
@@ -197,11 +204,89 @@ export interface ClientsType extends BasePaginate {
 }
 export interface SelectValue {
   value: number;
-  label: string;
-  count: number;
+  label?: string;
+  count?: number;
 }
 
 export enum Operations {
   decrement,
   increment,
+}
+
+export interface RoleTypes {
+  id: number;
+  name: string;
+  description: string;
+  status: number;
+  access: {
+    id: number;
+    name?: string;
+    permission?: PermissionsType;
+    role_id: number;
+    permission_id: number;
+    status: number;
+    created_at: string;
+    updated_at: string;
+  }[];
+
+  created_at: string;
+  updated_at: string;
+}
+
+export interface PermissionsType {
+  id: number;
+  parent_id: number;
+  created_at: string;
+  description: string;
+  name: string;
+  status: number;
+  updated_at: string;
+}
+
+export enum MainPermissions {
+  orders = 1,
+  ordersAll = 2,
+  categories = 3,
+  categoriesAll = 5,
+  foremanOrders = 5,
+  foremanOrdersAdd = 6,
+  buildingMaterials = 7,
+  foremen = 8,
+  foremenAll = 9,
+  roles = 10,
+  rolesAll = 11,
+  users = 12,
+  usersAll = 13,
+}
+
+export interface UserTypes {
+  id: number;
+  address: string;
+  name: string;
+  inn: string;
+  email: string;
+  company_name: string;
+  phone: string;
+  permission: PermissionsType;
+  status: number;
+  role: RoleTypes;
+}
+
+export interface UsersTypes extends BasePaginate {
+  items: UserTypes[];
+}
+
+export interface PurchasersTypes extends BasePaginate {
+  items: PurchaserType[];
+}
+
+export interface PurchaserType {
+  id: number;
+  address: null | string;
+  name: null | string;
+  inn: null | string;
+  email: null | string;
+  company_name: null | string;
+  phone: string;
+  status: number;
 }

@@ -274,6 +274,24 @@ const ShowRequestApc = () => {
                         : t("not_given")}
                     </td>
                   </tr>
+                  <tr>
+                    <th>{t("responsible")}</th>
+                    <td>
+                      <div className="flex items-center justify-between">
+                        <span>
+                          {order?.purchaser?.[0]?.user?.name || t("not_given")}
+                        </span>
+                        {order?.status! < OrderStatus.done && (
+                          <Button
+                            btnType={BtnTypes.success}
+                            onClick={() => handleModal(ModalTypes.assign)}
+                          >
+                            {t("assign")}
+                          </Button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
                   {order?.deny_reason && (
                     <tr>
                       <th>{t("deny_reason")}</th>

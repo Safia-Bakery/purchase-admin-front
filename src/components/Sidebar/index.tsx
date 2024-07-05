@@ -16,18 +16,34 @@ import {
   MenuItemStyles,
 } from "react-pro-sidebar";
 import "./index.scss";
+import { MainPermissions } from "@/utils/types";
+import useToken from "@/hooks/useToken";
 
 const routes = [
   {
     name: "orders",
     url: "/orders",
     icon: "/icons/chat.svg",
+    permission: MainPermissions.orders,
   },
   {
     name: "categories",
     url: "/categories",
     param: "",
     icon: "/icons/categories.svg",
+    permission: MainPermissions.categories,
+  },
+  {
+    name: "roles",
+    url: "/roles",
+    permission: MainPermissions.roles,
+    icon: "/icons/roles.svg",
+  },
+  {
+    name: "users",
+    url: "/users",
+    permission: MainPermissions.users,
+    icon: "/icons/users.svg",
   },
   {
     name: "building",
@@ -35,6 +51,7 @@ const routes = [
     subroutes: [
       {
         name: "orders",
+        permission: MainPermissions.foremanOrders,
         url: "/foreman-orders",
         icon: "/icons/orders.svg",
       },
@@ -42,11 +59,13 @@ const routes = [
         name: "buildingMaterial",
         url: "/building-materials",
         icon: "/icons/buildingMaterials.svg",
+        permission: MainPermissions.buildingMaterials,
       },
       {
         name: "foremen",
         url: "/foremen",
         icon: "/icons/foreman.svg",
+        permission: MainPermissions.foremanOrders,
       },
     ],
   },
@@ -68,6 +87,7 @@ const menuItemStyles: MenuItemStyles = {
 const CustomSidebar = () => {
   const { t } = useTranslation();
   const collapsed = useAppSelector(toggleSidebar);
+  const { data: me } = useToken({});
   const dispatch = useAppDispatch();
   const handleOverlay = () => dispatch(sidebarHandler(!collapsed));
   const { pathname } = useLocation();
@@ -92,20 +112,21 @@ const CustomSidebar = () => {
       >
         <div className="flex flex-col h-full">
           <div className="flex-1">
-            <div className={`${styles.link} ${styles.logo} `}>
+            <div className={`${styles.link} ${styles.logo}`}>
               <img
-                height={20}
-                width={20}
-                src={"/images/qrimage.png"}
-                className={styles.routeIcon}
+                src={"/icons/logo.svg"}
+                className={cl(styles.logo, { ["!opacity-100"]: collapsed })}
               />
-              <h3 className={styles.subTitle}>{t("purchase")}</h3>
+              {/* <h3 className={styles.subTitle}>{t("purchase")}</h3> */}
             </div>
             <Menu menuItemStyles={menuItemStyles}>
               {routes &&
                 routes.map((route) => (
                   <Fragment key={route.url + route.name}>
-                    {!!route.subroutes ? (
+                    {!!route.subroutes &&
+                    route.subroutes.some(
+                      (subroute) => me?.permissions?.[subroute.permission]
+                    ) ? (
                       <SubMenu
                         open={route.name === menuItem}
                         onClick={() => toggleSubItems(route.name)}
@@ -120,45 +141,52 @@ const CustomSidebar = () => {
                           />
                         }
                       >
-                        {route?.subroutes?.map((subroute) => (
-                          <MenuItem
-                            onClick={() => navigate(`${subroute.url}`)}
-                            icon={
-                              <img
-                                className={styles.routeIcon}
-                                height={30}
-                                width={30}
-                                src={subroute.icon || ""}
-                              />
-                            }
-                            active={pathname.includes(subroute.url!)}
-                            className={styles.content}
-                            key={subroute.url}
-                          >
-                            {t(subroute.name)}
-                          </MenuItem>
-                        ))}
+                        {route?.subroutes?.map(
+                          (subroute) =>
+                            me?.permissions?.[subroute.permission!] && (
+                              <MenuItem
+                                onClick={() => navigate(`${subroute.url}`)}
+                                icon={
+                                  <img
+                                    className={styles.routeIcon}
+                                    height={30}
+                                    width={30}
+                                    src={subroute.icon || ""}
+                                  />
+                                }
+                                active={pathname.includes(subroute.url!)}
+                                className={styles.content}
+                                key={subroute.url}
+                              >
+                                {t(subroute.name)}
+                              </MenuItem>
+                            )
+                        )}
                       </SubMenu>
                     ) : (
-                      <MenuItem
-                        className={cl(styles.content)}
-                        active={pathname.includes(route.url!)}
-                        onClick={() =>
-                          navigate(
-                            `${route.url}${!!route?.param ? route?.param : ""}`
-                          )
-                        }
-                        icon={
-                          <img
-                            className={styles.routeIcon}
-                            height={30}
-                            width={30}
-                            src={route.icon || ""}
-                          />
-                        }
-                      >
-                        {t(route.name)}
-                      </MenuItem>
+                      me?.permissions?.[route.permission!] && (
+                        <MenuItem
+                          className={cl(styles.content)}
+                          active={pathname.includes(route.url!)}
+                          onClick={() =>
+                            navigate(
+                              `${route.url}${
+                                !!route?.param ? route?.param : ""
+                              }`
+                            )
+                          }
+                          icon={
+                            <img
+                              className={styles.routeIcon}
+                              height={30}
+                              width={30}
+                              src={route.icon || ""}
+                            />
+                          }
+                        >
+                          {t(route.name)}
+                        </MenuItem>
+                      )
                     )}
                   </Fragment>
                 ))}

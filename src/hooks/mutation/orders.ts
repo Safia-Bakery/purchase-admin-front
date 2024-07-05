@@ -2,9 +2,10 @@ import baseApi from "@/api/baseApi";
 import { useMutation } from "@tanstack/react-query";
 
 interface Body {
-  status: number;
+  status?: number;
   id: string;
   deny_reason?: string;
+  purchaser_id?: number;
 }
 
 const orderMutation = () => {

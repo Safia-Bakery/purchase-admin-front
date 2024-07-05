@@ -81,12 +81,9 @@ function VirtualTable<T>({
   }, [btnAction]);
 
   return (
-    <div
-      ref={parentRef}
-      className={`${className} w-full bg-white overflow min-h-72`}
-    >
+    <div ref={parentRef} className={`${className} w-full bg-white overflow `}>
       <div
-        style={{ height: `${virtualizer.getTotalSize() + exHeight}px` }}
+        // style={{ height: `${virtualizer.getTotalSize() + exHeight}px` }}
         className="overflow-x-auto min-h-72"
       >
         <table className="table table-bordered w-full" ref={tableRef}>

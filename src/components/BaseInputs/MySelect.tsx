@@ -2,9 +2,7 @@ import { ChangeEvent, FC, ReactNode, useRef } from "react";
 import cl from "classnames";
 import styles from "./index.module.scss";
 import { UseFormRegisterReturn } from "react-hook-form";
-import { SelectValues } from "@/utils/types";
-import { useAppSelector } from "@/store/rootConfig";
-import { langSelector } from "@/store/reducers/selects";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   onChange?: (val: ChangeEvent<HTMLSelectElement>) => void;
@@ -12,12 +10,12 @@ interface Props {
   value?: string | number;
   disabled?: boolean;
   register?: UseFormRegisterReturn;
-  values?: SelectValues[];
+  values?: { id: number | string; name: string; status?: number }[];
   children?: ReactNode;
   onFocus?: () => void;
 }
 
-const MainSelect: FC<Props> = ({
+const MySelect: FC<Props> = ({
   className,
   register,
   values,
@@ -25,7 +23,7 @@ const MainSelect: FC<Props> = ({
   onFocus,
   ...others
 }) => {
-  const lang = useAppSelector(langSelector);
+  const { t } = useTranslation();
   const initialLoadRef = useRef(true);
   const handleFocus = () => {
     if (initialLoadRef.current) {
@@ -35,7 +33,12 @@ const MainSelect: FC<Props> = ({
   };
   return (
     <select
-      className={cl(className, styles.select, styles.inputBox)}
+      className={cl(
+        className,
+        "form-select form-control",
+        styles.select,
+        styles.inputBox
+      )}
       onFocus={handleFocus}
       {...others}
       {...register}
@@ -45,7 +48,7 @@ const MainSelect: FC<Props> = ({
           <option value={undefined}></option>
           {values?.map((item) => (
             <option key={item.id} value={item.id}>
-              {item[`name_${lang}`]}
+              {t(item.name)}
             </option>
           ))}
         </>
@@ -56,4 +59,4 @@ const MainSelect: FC<Props> = ({
   );
 };
 
-export default MainSelect;
+export default MySelect;

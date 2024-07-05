@@ -637,18 +637,6 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@react-input/core@^1.0.12":
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/@react-input/core/-/core-1.0.12.tgz#b76e2474ad544a02e476baa9184ee7ff788c3c3c"
-  integrity sha512-lZDQjphsJenWCD0mcflsyneLnb2a7bFAgAVzih9diEcUjKopcK+QOXhz0a0PHEp8k5LEKpYadjwyltAGOOhL2g==
-
-"@react-input/mask@^1.2.5":
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/@react-input/mask/-/mask-1.2.5.tgz#0ce9c48e36dfcb56705eda811b0143454e146e55"
-  integrity sha512-xouBATnitQqhgKLgu6/J2IZRu7kzqm/tFw2ToFnk6EkRzWs5dawlcF8asASMu7LCDrCqSkjwN+/sscEMG7IXog==
-  dependencies:
-    "@react-input/core" "^1.0.12"
-
 "@reduxjs/toolkit@^2.2.3":
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/@reduxjs/toolkit/-/toolkit-2.2.3.tgz#5ce71cbf162f98c5dafb49bd3f1e11c5486ab9c4"
@@ -839,13 +827,6 @@
   version "18.2.24"
   resolved "https://registry.yarnpkg.com/@types/react-dom/-/react-dom-18.2.24.tgz#8dda8f449ae436a7a6e91efed8035d4ab03ff759"
   integrity sha512-cN6upcKd8zkGy4HU9F1+/s98Hrp6D4MOcippK4PoE8OZRngohHZpbJn1GsaDLz87MqvHNoT13nHvNqM9ocRHZg==
-  dependencies:
-    "@types/react" "*"
-
-"@types/react-input-mask@^3.0.5":
-  version "3.0.5"
-  resolved "https://registry.yarnpkg.com/@types/react-input-mask/-/react-input-mask-3.0.5.tgz#9fbe9a984b3299419a6071dbf697ac2cae2abd2d"
-  integrity sha512-vQ1x6ykwjDrDrJZq1zw5/uQ+nqGHUV6bWscsVZJ/qsNwNXWxZm7KRBHLJ5k6TQt3MHjhpoYHzPH6FwjVSZODHA==
   dependencies:
     "@types/react" "*"
 

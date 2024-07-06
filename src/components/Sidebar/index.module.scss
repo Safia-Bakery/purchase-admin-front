@@ -21,7 +21,10 @@
     }
 
     .logo {
-      opacity: 1;
+      display: block;
+    }
+    .logo1 {
+      display: none;
     }
     @media (min-width: 1200px) {
       width: 260px !important;
@@ -213,10 +216,14 @@
 .logo {
   width: 230px;
   height: 70px;
-  opacity: 0;
+  display: none;
   margin-left: 8px;
   margin-right: 10px;
-  transition: all 200ms;
+  // transition: all 200ms;
+}
+.logo1 {
+  display: block;
+  margin-bottom: 10px;
 }
 .routeIcon {
   margin-left: 8px;

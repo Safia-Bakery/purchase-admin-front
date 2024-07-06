@@ -48,7 +48,7 @@ const Login = () => {
     );
   };
   useEffect(() => {
-    if (token) navigate(lastUrl);
+    if (token) navigate(lastUrl === "/login" ? "/" : lastUrl);
   }, [token]);
 
   return (

@@ -112,11 +112,16 @@ const CustomSidebar = () => {
       >
         <div className="flex flex-col h-full">
           <div className="flex-1">
-            <div className={`${styles.link} ${styles.logo}`}>
-              <img
-                src={"/icons/logo.svg"}
-                className={cl(styles.logo, { ["!opacity-100"]: collapsed })}
-              />
+            <div className={`${styles.link}`}>
+              <img src={"/icons/logo.svg"} className={styles.logo} />
+              <div className="w-full h-[80px] flex items-center">
+                <img
+                  height={50}
+                  width={50}
+                  src={"/icons/logoTitle.svg"}
+                  className={styles.logo1}
+                />
+              </div>
               {/* <h3 className={styles.subTitle}>{t("purchase")}</h3> */}
             </div>
             <Menu menuItemStyles={menuItemStyles}>

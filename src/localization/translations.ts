@@ -94,6 +94,7 @@ const localization = {
       send: "отправить",
       foremen: "Бригадиры",
       buildingMaterial: "Стройматериал",
+      "building-materials": "Стройматериалы",
       buildingMaterials: "Стройматериалы",
       building: "Стройка",
       sum_order: "Сумма заказа",

@@ -96,8 +96,9 @@ const Orders = () => {
       },
       {
         accessorKey: "purchaser?.[0]?.user?.name",
-        header: t("purchaser"),
-        cell: ({ row }) => row.original?.purchaser?.[0]?.user?.name,
+        header: t("responsible"),
+        cell: ({ row }) =>
+          row.original?.purchaser?.[0]?.user?.name || t("not_given"),
       },
       {
         accessorKey: "status",

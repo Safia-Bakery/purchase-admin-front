@@ -74,6 +74,7 @@ export interface OrderType {
 }
 
 export enum ModalTypes {
+  all,
   image,
   deny_reason,
   add_prods,

@@ -1,9 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { tokenSelector } from "reducers/auth";
-import { useAppSelector } from "@/store/rootConfig";
 import { BranchesType } from "@/utils/types";
 import baseApi from "@/api/baseApi";
 import { EPresetTimes } from "@/utils/helpers";
+import useAuthStore from "@/store/auth";
 
 interface Body {
   id?: string;
@@ -14,7 +13,7 @@ interface Body {
 }
 
 export const useBranch = ({ enabled, ...params }: Body) => {
-  const token = useAppSelector(tokenSelector);
+  const { token } = useAuthStore();
   return useQuery({
     queryKey: ["branch", params],
     queryFn: () =>

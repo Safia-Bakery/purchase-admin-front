@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { tokenSelector } from "reducers/auth";
-import { useAppSelector } from "@/store/rootConfig";
+import useAuthStore from "@/store/auth";
 import { CategoriesType } from "@/utils/types";
 import baseApi from "@/api/baseApi";
 
@@ -13,7 +12,7 @@ interface Body {
 }
 
 export const useCategories = ({ enabled, ...params }: Body) => {
-  const token = useAppSelector(tokenSelector);
+  const { token } = useAuthStore();
   return useQuery({
     queryKey: ["categories", params],
     queryFn: () =>

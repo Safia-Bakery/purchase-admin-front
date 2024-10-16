@@ -3,21 +3,20 @@ import CustomSidebar from "../Sidebar";
 import BreadCrump from "../BreadCrump";
 import { useNavigate } from "react-router-dom";
 import useToken from "@/hooks/useToken";
-import { logoutHandler, tokenSelector } from "@/store/reducers/auth";
-import { useAppDispatch, useAppSelector } from "@/store/rootConfig";
 import { useEffect } from "react";
 import Loading from "../Loader";
+import useAuthStore from "@/store/auth";
 
 const AdminRoutes = () => {
-  const token = useAppSelector(tokenSelector);
+  const { token, logoutHandler } = useAuthStore();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   const { error, isLoading } = useToken({});
 
+  console.log(token, "token");
   useEffect(() => {
     if (!token) navigate("/login");
-    if (!!error) dispatch(logoutHandler());
+    if (!!error) logoutHandler();
   }, [token, error]);
 
   if (isLoading) return <Loading />;

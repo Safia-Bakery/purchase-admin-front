@@ -16,8 +16,8 @@ import { useTranslation } from "react-i18next";
 import { BtnTypes, OrderStatus, OrderType } from "@/utils/types";
 import Header from "@/components/Header";
 import Button from "@/components/Button";
-import { useAppSelector } from "@/store/rootConfig";
-import { langSelector } from "@/store/reducers/selects";
+
+import useSelectsStore from "@/store/selects";
 import useOrders from "@/hooks/useOrders";
 import dayjs from "dayjs";
 import VirtualTable from "@/components/VirtualTable";
@@ -36,7 +36,7 @@ type Filter = {
 
 const Orders = () => {
   const { t } = useTranslation();
-  const lang = useAppSelector(langSelector);
+  const { lang } = useSelectsStore();
   const page = Number(useQueryString("page")) || 1;
   const [filter, $filter] = useState<Filter>();
   const { data: orders, isLoading } = useOrders({

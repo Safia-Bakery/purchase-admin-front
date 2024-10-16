@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { tokenSelector } from "reducers/auth";
-import { useAppSelector } from "@/store/rootConfig";
+import useAuthStore from "@/store/auth";
+
 import { ToolsSearchTypes } from "@/utils/types";
 import baseApi from "@/api/baseApi";
 import { EPresetTimes } from "@/utils/helpers";
@@ -14,7 +14,7 @@ interface Body {
 }
 
 export const useToolsSearch = ({ enabled, ...params }: Body) => {
-  const token = useAppSelector(tokenSelector);
+  const { token } = useAuthStore();
   return useQuery({
     queryKey: ["tool_search", params],
     queryFn: () =>

@@ -12,8 +12,8 @@ import orderMutation from "@/hooks/mutation/orders";
 import { RoleObj, dateTimeFormat, detectFileType } from "@/utils/helpers";
 import Container from "@/components/Container";
 import Header from "@/components/Header";
-import { useAppSelector } from "@/store/rootConfig";
-import { langSelector } from "@/store/reducers/selects";
+
+import useSelectsStore from "@/store/selects";
 import Button from "@/components/Button";
 import { errorToast, successToast } from "@/utils/toast";
 import { baseURL } from "@/api/baseApi";
@@ -24,7 +24,7 @@ const Modals = lazy(() => import("./modals"));
 const ShowRequestApc = () => {
   const { t } = useTranslation();
   const { id } = useParams();
-  const lang = useAppSelector(langSelector);
+  const { lang } = useSelectsStore();
   const navigate = useNavigate();
   const modal = Number(useQueryString("modal"));
   const navigateParams = useNavigateParams();

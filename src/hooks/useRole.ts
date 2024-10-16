@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { tokenSelector } from "reducers/auth";
-import { useAppSelector } from "@/store/rootConfig";
+import useAuthStore from "@/store/auth";
+
 import { RoleTypes } from "@/utils/types";
 import baseApi from "@/api/baseApi";
 
@@ -10,7 +10,7 @@ interface Body {
 }
 
 export const useRole = ({ enabled, id }: Body) => {
-  const token = useAppSelector(tokenSelector);
+  const { token } = useAuthStore();
   return useQuery({
     queryKey: ["role", id],
     queryFn: () =>

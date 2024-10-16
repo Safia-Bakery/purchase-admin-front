@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { tokenSelector } from "reducers/auth";
-import { useAppSelector } from "@/store/rootConfig";
+import useAuthStore from "@/store/auth";
+
 import baseApi from "@/api/baseApi";
 import { EPresetTimes } from "@/utils/helpers";
 
@@ -10,7 +10,7 @@ interface Body {
 }
 
 export const useToolsExcel = ({ enabled, id }: Body) => {
-  const token = useAppSelector(tokenSelector);
+  const { token } = useAuthStore();
   return useQuery({
     queryKey: ["excel_expanditure", id],
     queryFn: () =>

@@ -3,12 +3,7 @@ import MainInput from "@/components/BaseInputs/MainInput";
 import Button from "@/components/Button";
 import Loading from "@/components/Loader";
 import loginMutation from "@/hooks/mutation/login";
-import {
-  lastUrlSelector,
-  loginHandler,
-  tokenSelector,
-} from "@/store/reducers/auth";
-import { useAppDispatch, useAppSelector } from "@/store/rootConfig";
+import useAuthStore from "@/store/auth";
 import { successToast } from "@/utils/toast";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -17,11 +12,10 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const token = useAppSelector(tokenSelector);
   const [error, $error] = useState(false);
-  const lastUrl = useAppSelector(lastUrlSelector);
+  const { loginHandler, token } = useAuthStore();
+  console.log(token, "token");
 
   const {
     register,
@@ -39,7 +33,7 @@ const Login = () => {
       { username, password },
       {
         onSuccess: (data) => {
-          dispatch(loginHandler(data.access_token));
+          loginHandler(data.access_token);
           successToast(t("welcome"));
           if (error) $error(false);
         },
@@ -47,8 +41,9 @@ const Login = () => {
       }
     );
   };
+
   useEffect(() => {
-    if (token) navigate(lastUrl === "/login" ? "/" : lastUrl);
+    if (token) navigate("/");
   }, [token]);
 
   return (

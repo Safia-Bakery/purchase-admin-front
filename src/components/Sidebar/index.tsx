@@ -1,11 +1,7 @@
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import cl from "classnames";
-import { logoutHandler } from "reducers/auth";
 import styles from "./index.module.scss";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "@/store/rootConfig";
-import { isMobile } from "@/utils/helpers";
-import { sidebarHandler, toggleSidebar } from "@/store/reducers/selects";
 
 import { Fragment, useState } from "react";
 import {
@@ -18,6 +14,7 @@ import {
 import "./index.scss";
 import { MainPermissions } from "@/utils/types";
 import useToken from "@/hooks/useToken";
+import useSelectsStore from "@/store/selects";
 
 const routes = [
   {
@@ -86,10 +83,9 @@ const menuItemStyles: MenuItemStyles = {
 
 const CustomSidebar = () => {
   const { t } = useTranslation();
-  const collapsed = useAppSelector(toggleSidebar);
   const { data: me } = useToken({});
-  const dispatch = useAppDispatch();
-  const handleOverlay = () => dispatch(sidebarHandler(!collapsed));
+  const { sidebarToggler: collapsed, sidebarHandler } = useSelectsStore();
+  const handleOverlay = () => sidebarHandler(!collapsed);
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const [menuItem, $menuItem] = useState<string>();

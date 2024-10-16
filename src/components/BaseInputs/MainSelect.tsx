@@ -3,8 +3,7 @@ import cl from "classnames";
 import styles from "./index.module.scss";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { SelectValues } from "@/utils/types";
-import { useAppSelector } from "@/store/rootConfig";
-import { langSelector } from "@/store/reducers/selects";
+import useSelectsStore from "@/store/selects";
 
 interface Props {
   onChange?: (val: ChangeEvent<HTMLSelectElement>) => void;
@@ -25,7 +24,7 @@ const MainSelect: FC<Props> = ({
   onFocus,
   ...others
 }) => {
-  const lang = useAppSelector(langSelector);
+  const { lang } = useSelectsStore();
   const initialLoadRef = useRef(true);
   const handleFocus = () => {
     if (initialLoadRef.current) {

@@ -1,6 +1,4 @@
 import { createRoot } from "react-dom/client";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
@@ -9,8 +7,6 @@ import { BrowserRouter } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import App from "./App.tsx";
 import { queryClient } from "./utils/helpers.ts";
-import { persistor, store } from "./store/rootConfig.ts";
-import Loading from "./components/Loader/index.tsx";
 import "react-toastify/dist/ReactToastify.css";
 import "./index.scss";
 
@@ -24,16 +20,12 @@ document.addEventListener("DOMContentLoaded", function () {
     container = document.getElementById("root") as HTMLElement;
     const root = createRoot(container);
     root.render(
-      <Provider store={store}>
-        <PersistGate persistor={persistor} loading={<Loading />}>
-          <QueryClientProvider client={queryClient}>
-            <BrowserRouter>
-              <App />
-            </BrowserRouter>
-            <ToastContainer autoClose={600} />
-          </QueryClientProvider>
-        </PersistGate>
-      </Provider>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+        <ToastContainer autoClose={600} />
+      </QueryClientProvider>
     );
   }
 });

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { tokenSelector } from "reducers/auth";
-import { useAppSelector } from "@/store/rootConfig";
+import useAuthStore from "@/store/auth";
+
 import { ToolsType } from "@/utils/types";
 import baseApi from "@/api/baseApi";
 import { EPresetTimes } from "@/utils/helpers";
@@ -12,7 +12,7 @@ interface Body {
 }
 
 export const useTools = ({ enabled, ...params }: Body) => {
-  const token = useAppSelector(tokenSelector);
+  const { token } = useAuthStore();
   return useQuery({
     queryKey: ["tool_iarch", params],
     queryFn: () =>

@@ -1,12 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import styles from "./index.module.scss";
 import { ChangeEvent, FC } from "react";
-import { logoutHandler } from "reducers/auth";
 import { useTranslation } from "react-i18next";
-import { useAppDispatch, useAppSelector } from "@/store/rootConfig";
-import { changeLanguage, langSelector } from "@/store/reducers/selects";
 import { Language } from "@/utils/types";
 import useToken from "@/hooks/useToken";
+import useAuthStore from "@/store/auth";
+import useSelectsStore from "@/store/selects";
 
 interface Breadcrumb {
   path: string;
@@ -16,16 +15,16 @@ interface Breadcrumb {
 const Breadcrumbs: FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
+  const { logoutHandler } = useAuthStore();
   const pathname = location.pathname;
-  const dispatch = useAppDispatch();
-  const handleLogout = () => dispatch(logoutHandler());
-  const lang = useAppSelector(langSelector);
+  const handleLogout = () => logoutHandler();
+  const { lang, changeLanguage } = useSelectsStore();
   const { data } = useToken({});
 
   // const { data: me } = useToken({ enabled: false });
 
   const handleLang = (e: ChangeEvent<HTMLSelectElement>) =>
-    dispatch(changeLanguage(e.target.value as Language));
+    changeLanguage(e.target.value as Language);
 
   const breadcrumbs: Breadcrumb[] = [];
 

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { tokenSelector } from "reducers/auth";
-import { useAppSelector } from "@/store/rootConfig";
+import useAuthStore from "@/store/auth";
+
 import { ExpendituresType } from "@/utils/types";
 import baseApi from "@/api/baseApi";
 
@@ -16,7 +16,7 @@ interface Params {
 }
 
 export const useExpenditure = ({ enabled, ...params }: Params) => {
-  const token = useAppSelector(tokenSelector);
+  const { token } = useAuthStore();
   return useQuery({
     queryKey: ["expenditure", params],
     queryFn: () =>

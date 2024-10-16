@@ -1,6 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios";
-import { logoutHandler } from "@/store/reducers/auth";
-import { store } from "@/store/rootConfig";
+import useAuthStore from "@/store/auth";
 
 export const baseURL = "https://backend.purchase.safiabakery.uz";
 
@@ -15,8 +14,11 @@ const baseApi: AxiosInstance = axios.create({
 
 baseApi.interceptors.request.use(
   (config) => {
-    const token = store.getState()?.auth?.token;
-
+    const { token } = useAuthStore?.getState();
+    // const token = store.getState()?.auth?.token;
+    // const token = useAuthStore?.getState()?.token;
+    // const logout = useAuthStore?.getState()?.logoutHandler;
+    console.log(token, "api token");
     if (!!token) {
       if (config.headers) config.headers.Authorization = `Bearer ${token}`;
     }
@@ -33,14 +35,10 @@ baseApi.interceptors.response.use(
   },
   (error) => {
     if (logoutObj[error?.response?.status]) {
-      logoutUser();
+      const { logoutHandler } = useAuthStore?.getState();
+      logoutHandler();
     }
     return Promise.reject(error);
   }
 );
-
-function logoutUser() {
-  store?.dispatch(logoutHandler());
-}
-
 export default baseApi;

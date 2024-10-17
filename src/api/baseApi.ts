@@ -15,10 +15,7 @@ const baseApi: AxiosInstance = axios.create({
 baseApi.interceptors.request.use(
   (config) => {
     const { token } = useAuthStore?.getState();
-    // const token = store.getState()?.auth?.token;
-    // const token = useAuthStore?.getState()?.token;
-    // const logout = useAuthStore?.getState()?.logoutHandler;
-    console.log(token, "api token");
+
     if (!!token) {
       if (config.headers) config.headers.Authorization = `Bearer ${token}`;
     }

@@ -13,7 +13,6 @@ const AdminRoutes = () => {
 
   const { error, isLoading } = useToken({});
 
-  console.log(token, "token");
   useEffect(() => {
     if (!token) navigate("/login");
     if (!!error) logoutHandler();

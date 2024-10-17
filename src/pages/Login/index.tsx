@@ -15,7 +15,6 @@ const Login = () => {
   const navigate = useNavigate();
   const [error, $error] = useState(false);
   const { loginHandler, token } = useAuthStore();
-  console.log(token, "token");
 
   const {
     register,

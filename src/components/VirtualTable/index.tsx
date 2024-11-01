@@ -9,7 +9,6 @@ import {
 } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { ReactNode, useEffect, useRef, useState } from "react";
-import EmptyList from "../EmptyList";
 import { useDownloadExcel } from "react-export-table-to-excel";
 import { excelBtnId } from "@/utils/helpers";
 
